@@ -1,8 +1,20 @@
-.form-wrapper {
-  margin-top: 10px; /* sebelumnya 100px */
-  text-align: center;
+/* ==================================
+   === RESET BOX SIZING ===
+   ================================== */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
 }
 
+/* ==================================
+   === FORM WRAPPER & LAYOUT ===
+   ================================== */
+
+.form-wrapper {
+  margin-top: 20px;
+  text-align: center;
+}
 
 .form-page-title {
   font-size: 2rem;
@@ -14,21 +26,31 @@
 .form-container {
   padding: 30px;
   background-color: white;
-  border-radius: 16px;
-  max-width: 900px; /* diperlebar */
-  margin-left: auto;
-  margin-right: auto;
+  border-radius: 16px; /* Sudut card seragam */
+  max-width: 900px;
+  margin: 0 auto;
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
   text-align: left;
 }
 
 .form-title {
   font-weight: bold;
-  font-size: 1.6rem;
+  font-size: 1.8rem;
   margin-bottom: 25px;
   color: #333;
   text-align: center;
 }
+
+.form-subtitle {
+  font-weight: bold;
+  margin-bottom: 20px;
+  text-align: center;
+  font-size: 1.2rem;
+}
+
+/* ==================================
+   === INPUT, TEXTAREA, SELECT ===
+   ================================== */
 
 .form-field {
   margin-bottom: 20px;
@@ -47,7 +69,7 @@
 .form-field select {
   padding: 10px 12px;
   border: 1px solid #ccc;
-  border-radius: 8px;
+  border-radius: 8px; /* Sudut input seragam */
   font-size: 1rem;
   background-color: #fdfdfd;
   transition: border-color 0.2s ease;
@@ -60,17 +82,29 @@
   outline: none;
 }
 
+/* Spesifik: File input agar radius tetap seragam */
+.form-field input[type="file"] {
+  padding: 10px 12px;
+  border-radius: 8px; /* Sama dengan input lain */
+  background: #fdfdfd;
+}
+
+/* ==================================
+   === BUTTONS ===
+   ================================== */
+
 .form-button {
   background-color: #0047ff;
   color: white;
   padding: 12px;
   border: none;
-  border-radius: 10px;
+  border-radius: 10px; /* Sudut tombol */
   width: 100%;
   cursor: pointer;
   font-weight: bold;
   font-size: 15px;
   margin-top: 10px;
+  transition: background-color 0.2s ease;
 }
 
 .form-button:hover {
@@ -78,10 +112,9 @@
 }
 
 .back-button {
-  margin-bottom: 25px;
   background-color: #f5f5f5;
   padding: 10px 16px;
-  border-radius: 10px;
+  border-radius: 10px; /* Sudut tombol */
   border: none;
   font-weight: bold;
   cursor: pointer;
@@ -94,7 +127,68 @@
 
 .back-button-wrapper {
   position: relative;
-  top: 20px; /* sesuaikan agar tidak tertutup navbar */
+  top: 20px;
   left: 30px;
   z-index: 10;
+  margin-bottom: 15px;
+}
+
+/* ==================================
+   === GRID UNTUK FIELD BERDUA ===
+   ================================== */
+
+.form-grid,
+.saksi-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+/* Responsive: grid jadi 1 kolom di layar kecil */
+@media (max-width: 768px) {
+  .form-grid,
+  .saksi-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ==================================
+   === BUTTON GROUP BAWAH ===
+   ================================== */
+
+.form-buttons {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 15px;
+  margin-top: 30px;
+}
+
+.form-buttons .back-button,
+.form-buttons .form-button {
+  flex: 1 1 180px;
+  max-width: 200px;
+}
+
+/* ==================================
+   === RESPONSIVE TEXT ===
+   ================================== */
+
+@media (max-width: 500px) {
+  .form-title {
+    font-size: 1.4rem;
+  }
+  .form-page-title {
+    font-size: 1.6rem;
+  }
+}
+
+.form-buttons .back-button.reset {
+  background-color: #ff4d4d;
+  color: white;
+}
+
+.form-buttons .back-button.reset:hover {
+  background-color: #e60000;
 }

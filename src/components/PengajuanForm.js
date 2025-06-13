@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import '../styles/Form.css';
 
-const PengajuanForm = ({ onBack }) => {
+const PengajuanForm = ({ onBack, onNext }) => {
   const [formData, setFormData] = useState({
     nama: '',
     nik: '',
+    ttl: '',
     alamat: '',
-    jenisSurat: '',
+    telepon: '',
+    email: '',
   });
 
   const handleChange = (e) => {
@@ -16,6 +18,7 @@ const PengajuanForm = ({ onBack }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log('Form submitted:', formData);
+    if (onNext) onNext();
   };
 
   return (
@@ -30,31 +33,72 @@ const PengajuanForm = ({ onBack }) => {
         <div className="form-container">
           <form onSubmit={handleSubmit}>
             <div className="form-field">
-              <label>Nama Lengkap
-Ahli Waris</label>
-              <input type="text" name="nama" value={formData.nama} onChange={handleChange} required />
+              <label>Nama Lengkap Ahli Waris</label>
+              <input
+                type="text"
+                name="nama"
+                value={formData.nama}
+                onChange={handleChange}
+                required
+              />
             </div>
+
             <div className="form-field">
               <label>NIK</label>
-              <input type="text" name="nik" value={formData.nik} onChange={handleChange} required />
+              <input
+                type="text"
+                name="nik"
+                value={formData.nik}
+                onChange={handleChange}
+                required
+              />
             </div>
+
             <div className="form-field">
               <label>Tempat & Tanggal Lahir</label>
-              <input type="text" name="alamat" value={formData.alamat} onChange={handleChange} required />
+              <input
+                type="text"
+                name="ttl"
+                value={formData.ttl}
+                onChange={handleChange}
+                required
+              />
             </div>
+
             <div className="form-field">
               <label>Alamat Lengkap Domisili</label>
-              <input type="text" name="jenisSurat" value={formData.jenisSurat} onChange={handleChange} required />
+              <input
+                type="text"
+                name="alamat"
+                value={formData.alamat}
+                onChange={handleChange}
+                required
+              />
             </div>
-             <div className="form-field">
-              <label>Nomor Telefon</label>
-              <input type="text" name="jenisSurat" value={formData.jenisSurat} onChange={handleChange} required />
+
+            <div className="form-field">
+              <label>Nomor Telepon</label>
+              <input
+                type="text"
+                name="telepon"
+                value={formData.telepon}
+                onChange={handleChange}
+                required
+              />
             </div>
-             <div className="form-field">
+
+            <div className="form-field">
               <label>Email</label>
-              <input type="text" name="jenisSurat" value={formData.jenisSurat} onChange={handleChange} required />
+              <input
+                type="email"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
+                required
+              />
             </div>
-            <button className="form-button" type="submit">Kirim</button>
+
+            <button className="form-button" type="submit">Selanjutnya</button>
           </form>
         </div>
       </div>
