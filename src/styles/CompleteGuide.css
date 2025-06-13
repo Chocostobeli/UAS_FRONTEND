@@ -1,0 +1,59 @@
+@media (max-width: 768px) {
+  .guide-card {
+    width: 100%;
+  }
+}
+
+.guide-container {
+  background-color: #f5f7ff;
+  padding: 4rem 2rem;
+  text-align: center;
+}
+
+.guide-title {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 3rem;
+}
+
+.guide-title span {
+  color: #2f4ffd;
+}
+
+.guide-cards {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 2rem;
+}
+
+.guide-card {
+  background-color: white;
+  border-radius: 1rem;
+  padding: 2rem;
+  width: 380px; /* sebelumnya 320px */
+  max-width: 90%;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  text-align: left;
+  transition: transform 0.2s;
+}
+
+.guide-card:hover {
+  transform: translateY(-4px);
+}
+
+.submit-button {
+  background-color: #2F4FFD; /* biru */
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 1rem;
+  transition: background-color 0.3s;
+}
+
+.submit-button:hover {
+  background-color: #2440d4; /* warna biru saat hover */
+}

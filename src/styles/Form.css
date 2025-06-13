@@ -1,0 +1,100 @@
+.form-wrapper {
+  margin-top: 10px; /* sebelumnya 100px */
+  text-align: center;
+}
+
+
+.form-page-title {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 30px;
+  color: #222;
+}
+
+.form-container {
+  padding: 30px;
+  background-color: white;
+  border-radius: 16px;
+  max-width: 900px; /* diperlebar */
+  margin-left: auto;
+  margin-right: auto;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+  text-align: left;
+}
+
+.form-title {
+  font-weight: bold;
+  font-size: 1.6rem;
+  margin-bottom: 25px;
+  color: #333;
+  text-align: center;
+}
+
+.form-field {
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.form-field label {
+  font-weight: 600;
+  margin-bottom: 6px;
+  color: #444;
+}
+
+.form-field input,
+.form-field textarea,
+.form-field select {
+  padding: 10px 12px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 1rem;
+  background-color: #fdfdfd;
+  transition: border-color 0.2s ease;
+}
+
+.form-field input:focus,
+.form-field textarea:focus,
+.form-field select:focus {
+  border-color: #0047ff;
+  outline: none;
+}
+
+.form-button {
+  background-color: #0047ff;
+  color: white;
+  padding: 12px;
+  border: none;
+  border-radius: 10px;
+  width: 100%;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 15px;
+  margin-top: 10px;
+}
+
+.form-button:hover {
+  background-color: #0038cc;
+}
+
+.back-button {
+  margin-bottom: 25px;
+  background-color: #f5f5f5;
+  padding: 10px 16px;
+  border-radius: 10px;
+  border: none;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.back-button:hover {
+  background-color: #e0e0e0;
+}
+
+.back-button-wrapper {
+  position: relative;
+  top: 20px; /* sesuaikan agar tidak tertutup navbar */
+  left: 30px;
+  z-index: 10;
+}
