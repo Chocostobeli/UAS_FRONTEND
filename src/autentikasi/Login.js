@@ -1,8 +1,25 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import './Auth.css'; // pastikan file ini ada dan diimport
+import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import './Auth.css';
 
 const Login = () => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const navigate = useNavigate();
+
+  const handleLogin = (e) => {
+    e.preventDefault();
+
+    // Simulasi login sukses
+    const fakeUser = { email }; // bisa ditambahkan role/nama/ID, dst
+
+    // Simpan ke localStorage
+    localStorage.setItem('user', JSON.stringify(fakeUser));
+
+    // Redirect ke halaman utama
+    navigate('/');
+  };
+
   return (
     <div className="auth-container">
       <div className="auth-image">
@@ -13,12 +30,14 @@ const Login = () => {
       </div>
       <div className="auth-form">
         <h2>Log in</h2>
-        <form>
+        <form onSubmit={handleLogin}>
           <div className="form-group">
             <label htmlFor="email">Email</label>
             <input 
               type="email" 
               id="email" 
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               placeholder="Enter your email..." 
               required 
             />
@@ -28,7 +47,9 @@ const Login = () => {
             <label htmlFor="password">Password</label>
             <input 
               type="password" 
-              id="password" 
+              id="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
               placeholder="Enter your password..." 
               required 
             />
