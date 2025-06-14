@@ -1,0 +1,124 @@
+/* src/Users/Profile.css */
+
+.user-container {
+  display: flex;
+  min-height: 100vh;
+}
+
+.user-sidebar {
+  width: 200px;
+  background: #0025ff;
+  color: #fff;
+  padding: 20px;
+}
+
+.user-sidebar h2 {
+  margin-bottom: 40px;
+}
+
+.sidebar-btn {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.sidebar-btn.active,
+.sidebar-btn:hover {
+  background: #fff;
+  color: #0025ff;
+}
+
+.user-main {
+  flex: 1;
+  padding: 20px;
+}
+
+.user-navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.logout-btn {
+  background: red;
+  color: #fff;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 20px;
+  cursor: pointer;
+}
+
+.user-card {
+  background: #fff;
+  padding: 30px;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.profile-photo {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.profile-photo img {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+}
+
+.upload-btn {
+  margin-top: 10px;
+  background: #0025ff;
+  color: #fff;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.profile-form label {
+  display: block;
+  margin-top: 10px;
+}
+
+.profile-form input {
+  width: 100%;
+  padding: 8px;
+  margin-top: 4px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.verified {
+  color: green;
+  margin-top: 4px;
+}
+
+.radio-group {
+  margin-top: 8px;
+}
+
+.radio-group label {
+  margin-right: 20px;
+}
+
+.save-btn {
+  margin-top: 20px;
+  background: #0025ff;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 20px;
+  cursor: pointer;
+}
+
+.pengajuan-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
