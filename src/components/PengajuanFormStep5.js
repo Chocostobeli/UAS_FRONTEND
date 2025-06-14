@@ -95,4 +95,4 @@ const PengajuanFormStep4 = ({ onBack, onSubmit }) => {
   );
 };
 
-export default PengajuanFormStep4;
+export default PengajuanFormStep5;

@@ -136,4 +136,4 @@ const PengajuanFormStep2 = ({ onBack, onNext }) => {
   );
 };
 
-export default PengajuanFormStep2;
+export default PengajuanFormStep3;

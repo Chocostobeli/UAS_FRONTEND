@@ -1,8 +1,19 @@
 import React from 'react';
-
 import '../styles/CompleteGuide.css';
+import { useNavigate } from 'react-router-dom';
 
-const CompleteGuide = ({ onKirimClick, onKirimWnaClick }) => { 
+const CompleteGuide = ({ isLoggedIn, onKirimClick, onKirimWnaClick }) => {
+  const navigate = useNavigate();
+
+  const handleClick = (callback) => {
+    if (!isLoggedIn) {
+      alert("Silakan login atau registrasi terlebih dahulu.");
+      navigate('/login'); // arahkan ke halaman login
+      return;
+    }
+    callback(); // jalankan fungsi pengajuan
+  };
+  
   return (
     <section id="pengajuan" className="guide-container">
       <h2 className="guide-title">

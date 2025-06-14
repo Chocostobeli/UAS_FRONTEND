@@ -103,4 +103,4 @@ const PengajuanFormPewaris = ({ onBack, onNext }) => {
   );
 };
 
-export default PengajuanFormPewaris;
+export default PengajuanFormStep2;
