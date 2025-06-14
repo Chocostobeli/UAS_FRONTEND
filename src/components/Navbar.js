@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom'; // ✅ Import Link dari react-router-dom
 import '../styles/Navbar.css'; // sudah dipindahkan
 
 const Navbar = () => {
@@ -11,8 +12,8 @@ const Navbar = () => {
         <li><a href="#pengajuan">Pengajuan</a></li>
       </ul>
       <div className="navbar-auth">
-        <button className="btn login">Login</button>
-        <button className="btn register">Register</button>
+        <Link to="/login" className="btn login">Login</Link>
+       <Link to="/register" className="btn register">Register</Link>
       </div>
     </nav>
   );
