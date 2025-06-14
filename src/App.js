@@ -7,13 +7,15 @@ import PengajuanForm from './components/PengajuanForm';
 import PengajuanFormStep2 from './components/PengajuanFormStep2';
 import PengajuanFormStep3 from './components/PengajuanFormStep3';
 import PengajuanFormStep4 from './components/PengajuanFormStep4';
+import PengajuanFormStep5 from './components/PengajuanFormStep5';
 
 function App() {
   // Step 0: Home page
   // Step 1: Form Step 1
   // Step 2: Form Step 2
   // Step 3: Form Step 3
-  // Step 4: Form Step 4 (last)
+  // Step 4: Form Step 4 
+  // Step 5: Form Step 5 (last)
   const [step, setStep] = useState(0);
 
   const handleShowForm = () => setStep(1);
@@ -55,6 +57,13 @@ function App() {
       {step === 4 && (
         <PengajuanFormStep4
           onBack={() => setStep(3)}
+          onNext={() => setStep(5)}
+        />
+      )}
+
+      {step === 5 && (
+        <PengajuanFormStep5
+          onBack={() => setStep(4)}
           onSubmit={() => {
             alert('Pengajuan berhasil diajukan!');
             setStep(0); // kembali ke home

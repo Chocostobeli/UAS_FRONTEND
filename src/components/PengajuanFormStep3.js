@@ -1,50 +1,29 @@
 import React, { useState } from 'react';
 import '../styles/Form.css';
 
-const PengajuanFormStep3 = ({ onBack, onNext }) => {
+const PengajuanFormStep2 = ({ onBack, onNext }) => {
   const [formData, setFormData] = useState({
-    suratKematian: '',
-    ktpAhliWaris: '',
-    kartuKeluarga: '',
-    suratNikah: '',
-    aktaKelahiran: '',
-    suratKuasa: '',
-    sertifikatTanah: '',
-    bukuTabungan: '',
-    pernyataanBenar: false,
+    jumlahAhliWaris: '',
+    namaAhliWarisLainnya: '',
+    namaSaksi1: '',
+    nikSaksi1: '',
+    fotoKtpSaksi1: '',
+    namaSaksi2: '',
+    nikSaksi2: '',
+    fotoKtpSaksi2: '',
   });
 
-  const handleFileChange = (e) => {
-    const { name, files } = e.target;
+  const handleChange = (e) => {
+    const { name, value, files } = e.target;
     setFormData({
       ...formData,
-      [name]: files[0],
-    });
-  };
-
-  const handleCheckboxChange = (e) => {
-    setFormData({
-      ...formData,
-      pernyataanBenar: e.target.checked,
-    });
-  };
-
-  const handleReset = () => {
-    setFormData({
-      suratKematian: '',
-      ktpAhliWaris: '',
-      kartuKeluarga: '',
-      suratNikah: '',
-      aktaKelahiran: '',
-      suratKuasa: '',
-      sertifikatTanah: '',
-      bukuTabungan: '',
-      pernyataanBenar: false,
+      [name]: files ? files[0] : value,
     });
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    console.log('Step 2 submitted:', formData);
     if (onNext) onNext();
   };
 
@@ -57,111 +36,99 @@ const PengajuanFormStep3 = ({ onBack, onNext }) => {
       <div className="form-wrapper">
         <h2 className="form-title">Pengisian Forum Pengajuan untuk WNI</h2>
         <div className="form-container">
-          <h3 className="form-subtitle">Dokumen yang Diperlukan</h3>
+          <h3 className="form-subtitle">Data Keluarga</h3>
           <form onSubmit={handleSubmit}>
-
-            {/* Dokumen Wajib */}
             <div className="form-field">
-              <label>Dokumen Surat Kematian</label>
+              <label>Jumlah Ahli Waris</label>
               <input
-                type="file"
-                name="suratKematian"
-                accept="application/pdf"
-                onChange={handleFileChange}
+                type="number"
+                name="jumlahAhliWaris"
+                value={formData.jumlahAhliWaris}
+                onChange={handleChange}
                 required
               />
             </div>
-
             <div className="form-field">
-              <label>KTP (Ahli Waris)</label>
+              <label>Nama Ahli Waris Lainnya</label>
               <input
-                type="file"
-                name="ktpAhliWaris"
-                accept="application/pdf"
-                onChange={handleFileChange}
+                type="text"
+                name="namaAhliWarisLainnya"
+                value={formData.namaAhliWarisLainnya}
+                onChange={handleChange}
+              />
+            </div>
+
+            <h4>Data Saksi</h4>
+            <div className="saksi-grid">
+            <div>
+                <label>Nama Saksi 1</label>
+                <input
+                type="text"
+                name="namaSaksi1"
+                value={formData.namaSaksi1}
+                onChange={handleChange}
                 required
-              />
+                />
+            </div>
+            <div>
+                <label>Nama Saksi 2 (Kalau ada)</label>
+                <input
+                type="text"
+                name="namaSaksi2"
+                value={formData.namaSaksi2}
+                onChange={handleChange}
+                />
+            </div>
             </div>
 
-            <div className="form-field">
-              <label>Kartu Keluarga</label>
-              <input
-                type="file"
-                name="kartuKeluarga"
-                accept="application/pdf"
-                onChange={handleFileChange}
+            <div className="saksi-grid">
+            <div>
+                <label>NIK Saksi 1</label>
+                <input
+                type="text"
+                name="nikSaksi1"
+                value={formData.nikSaksi1}
+                onChange={handleChange}
                 required
-              />
+                />
+            </div>
+            <div>
+                <label>NIK Saksi 2 (Kalau ada)</label>
+                <input
+                type="text"
+                name="nikSaksi2"
+                value={formData.nikSaksi2}
+                onChange={handleChange}
+                />
+            </div>
             </div>
 
-            {/* Dokumen Opsional */}
-            <div className="form-field">
-              <label>Surat Nikah (Opsional)</label>
-              <input
+            <div className="saksi-grid">
+            <div>
+                <label>Foto KTP Saksi 1</label>
+                <input
                 type="file"
-                name="suratNikah"
-                accept="application/pdf"
-                onChange={handleFileChange}
-              />
+                name="fotoKtpSaksi1"
+                accept="application/pdf,image/*"
+                onChange={handleChange}
+                required
+                />
             </div>
-
-            <div className="form-field">
-              <label>Akta Kelahiran (Opsional)</label>
-              <input
+            <div>
+                <label>Foto KTP Saksi 2</label>
+                <input
                 type="file"
-                name="aktaKelahiran"
-                accept="application/pdf"
-                onChange={handleFileChange}
-              />
+                name="fotoKtpSaksi2"
+                accept="application/pdf,image/*"
+                onChange={handleChange}
+                />
+            </div>
             </div>
 
-            <div className="form-field">
-              <label>Surat Kuasa Ahli Waris (Opsional)</label>
-              <input
-                type="file"
-                name="suratKuasa"
-                accept="application/pdf"
-                onChange={handleFileChange}
-              />
-            </div>
-
-            <div className="form-field">
-              <label>Sertifikat Tanah/Rumah (Opsional)</label>
-              <input
-                type="file"
-                name="sertifikatTanah"
-                accept="application/pdf"
-                onChange={handleFileChange}
-              />
-            </div>
-
-            <div className="form-field">
-              <label>Buku Tabungan/Rekening Bank (Pewaris) (Opsional)</label>
-              <input
-                type="file"
-                name="bukuTabungan"
-                accept="application/pdf"
-                onChange={handleFileChange}
-              />
-            </div>
-
-            {/* Pernyataan */}
-            <label className="checkbox-container">
-            <input 
-                type="checkbox"
-                checked={formData.pernyataanBenar}
-                onChange={handleCheckboxChange}
-                required 
-            />
-            Kami menyatakan bahwa data yang diberikan adalah benar dan sah
-            </label>
-
-            <div className="form-buttons">
+         <div className="form-buttons">
               <button type="button" className="back-button" onClick={onBack}>Kembali</button>
-              <button type="button" className="back-button" style={{ backgroundColor: '#ff4d4d', color: '#fff' }} onClick={handleReset}>Reset</button>
               <button type="submit" className="form-button">Selanjutnya</button>
             </div>
-
           </form>
         </div>
       </div>
@@ -169,4 +136,4 @@ const PengajuanFormStep3 = ({ onBack, onNext }) => {
   );
 };
 
-export default PengajuanFormStep3;
+export default PengajuanFormStep2;

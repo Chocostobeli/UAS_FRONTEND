@@ -1,26 +1,51 @@
 import React, { useState } from 'react';
 import '../styles/Form.css';
 
-const PengajuanFormStep4 = ({ onBack, onSubmit }) => {
+const PengajuanFormStep3 = ({ onBack, onNext }) => {
   const [formData, setFormData] = useState({
-    opsiPengiriman: '',
-    nama: '',
-    nomorTelepon: '',
-    alamat: '',
+    suratKematian: '',
+    ktpAhliWaris: '',
+    kartuKeluarga: '',
+    suratNikah: '',
+    aktaKelahiran: '',
+    suratKuasa: '',
+    sertifikatTanah: '',
+    bukuTabungan: '',
+    pernyataanBenar: false,
   });
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
+  const handleFileChange = (e) => {
+    const { name, files } = e.target;
     setFormData({
       ...formData,
-      [name]: value,
+      [name]: files[0],
     });
   };
 
-  const handleFormSubmit = (e) => {
+  const handleCheckboxChange = (e) => {
+    setFormData({
+      ...formData,
+      pernyataanBenar: e.target.checked,
+    });
+  };
+
+  const handleReset = () => {
+    setFormData({
+      suratKematian: '',
+      ktpAhliWaris: '',
+      kartuKeluarga: '',
+      suratNikah: '',
+      aktaKelahiran: '',
+      suratKuasa: '',
+      sertifikatTanah: '',
+      bukuTabungan: '',
+      pernyataanBenar: false,
+    });
+  };
+
+  const handleSubmit = (e) => {
     e.preventDefault();
-    console.log('Step 4 submitted:', formData);
-    if (onSubmit) onSubmit(formData);
+    if (onNext) onNext();
   };
 
   return (
@@ -32,62 +57,111 @@ const PengajuanFormStep4 = ({ onBack, onSubmit }) => {
       <div className="form-wrapper">
         <h2 className="form-title">Pengisian Forum Pengajuan untuk WNI</h2>
         <div className="form-container">
-          <h3 className="form-subtitle">Opsi Pengiriman dan Pengambilan Surat</h3>
+          <h3 className="form-subtitle">Dokumen yang Diperlukan</h3>
+          <form onSubmit={handleSubmit}>
 
-          <form onSubmit={handleFormSubmit}>
+            {/* Dokumen Wajib */}
             <div className="form-field">
-              <label>Opsi Pengiriman</label>
-              <select
-                name="opsiPengiriman"
-                value={formData.opsiPengiriman}
-                onChange={handleChange}
-                required
-              >
-                <option value="">-- Pilih Opsi --</option>
-                <option value="kurir">Jasa Kurir</option>
-                <option value="ambil">Ambil Langsung</option>
-              </select>
-            </div>
-
-            <p>Silahkan isi alamat pengiriman jika memilih opsi jasa kurir</p>
-
-            <div className="form-field">
-              <label>Nama</label>
+              <label>Dokumen Surat Kematian</label>
               <input
-                type="text"
-                name="nama"
-                value={formData.nama}
-                onChange={handleChange}
+                type="file"
+                name="suratKematian"
+                accept="application/pdf"
+                onChange={handleFileChange}
                 required
               />
             </div>
 
             <div className="form-field">
-              <label>Nomor Telepon</label>
+              <label>KTP (Ahli Waris)</label>
               <input
-                type="text"
-                name="nomorTelepon"
-                value={formData.nomorTelepon}
-                onChange={handleChange}
+                type="file"
+                name="ktpAhliWaris"
+                accept="application/pdf"
+                onChange={handleFileChange}
                 required
               />
             </div>
 
             <div className="form-field">
-              <label>Alamat Pengiriman</label>
-              <textarea
-                name="alamat"
-                value={formData.alamat}
-                onChange={handleChange}
+              <label>Kartu Keluarga</label>
+              <input
+                type="file"
+                name="kartuKeluarga"
+                accept="application/pdf"
+                onChange={handleFileChange}
+                required
               />
             </div>
 
-            <p>Catatan: Biaya pengiriman di tanggung oleh pemohon</p>
+            {/* Dokumen Opsional */}
+            <div className="form-field">
+              <label>Surat Nikah (Opsional)</label>
+              <input
+                type="file"
+                name="suratNikah"
+                accept="application/pdf"
+                onChange={handleFileChange}
+              />
+            </div>
+
+            <div className="form-field">
+              <label>Akta Kelahiran (Opsional)</label>
+              <input
+                type="file"
+                name="aktaKelahiran"
+                accept="application/pdf"
+                onChange={handleFileChange}
+              />
+            </div>
+
+            <div className="form-field">
+              <label>Surat Kuasa Ahli Waris (Opsional)</label>
+              <input
+                type="file"
+                name="suratKuasa"
+                accept="application/pdf"
+                onChange={handleFileChange}
+              />
+            </div>
+
+            <div className="form-field">
+              <label>Sertifikat Tanah/Rumah (Opsional)</label>
+              <input
+                type="file"
+                name="sertifikatTanah"
+                accept="application/pdf"
+                onChange={handleFileChange}
+              />
+            </div>
+
+            <div className="form-field">
+              <label>Buku Tabungan/Rekening Bank (Pewaris) (Opsional)</label>
+              <input
+                type="file"
+                name="bukuTabungan"
+                accept="application/pdf"
+                onChange={handleFileChange}
+              />
+            </div>
+
+            {/* Pernyataan */}
+            <label className="checkbox-container">
+            <input 
+                type="checkbox"
+                checked={formData.pernyataanBenar}
+                onChange={handleCheckboxChange}
+                required 
+            />
+            Kami menyatakan bahwa data yang diberikan adalah benar dan sah
+            </label>
 
             <div className="form-buttons">
               <button type="button" className="back-button" onClick={onBack}>Kembali</button>
-              <button type="submit" className="form-button">Ajukan</button>
+              <button type="button" className="back-button" style={{ backgroundColor: '#ff4d4d', color: '#fff' }} onClick={handleReset}>Reset</button>
+              <button type="submit" className="form-button">Selanjutnya</button>
             </div>
+
           </form>
         </div>
       </div>
@@ -95,4 +169,4 @@ const PengajuanFormStep4 = ({ onBack, onSubmit }) => {
   );
 };
 
-export default PengajuanFormStep4;
+export default PengajuanFormStep3;

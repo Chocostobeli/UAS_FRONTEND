@@ -1,131 +1,98 @@
 import React, { useState } from 'react';
+
 import '../styles/Form.css';
 
-const PengajuanFormStep2 = ({ onBack, onNext }) => {
+const PengajuanFormPewaris = ({ onBack, onNext }) => {
+  // State untuk menyimpan data pewaris
   const [formData, setFormData] = useState({
-    jumlahAhliWaris: '',
-    namaAhliWarisLainnya: '',
-    namaSaksi1: '',
-    nikSaksi1: '',
-    fotoKtpSaksi1: '',
-    namaSaksi2: '',
-    nikSaksi2: '',
-    fotoKtpSaksi2: '',
+    namaPewaris: '',
+    ktpPewaris: '', // Opsional, jika masih ada
+    tanggalWafat: '',
+    alamatTerakhirPewaris: '',
   });
 
+  // Handler untuk memperbarui state saat input berubah
   const handleChange = (e) => {
-    const { name, value, files } = e.target;
+    const { name, value } = e.target;
     setFormData({
       ...formData,
-      [name]: files ? files[0] : value,
+      [name]: value,
     });
   };
 
+  // Handler saat form disubmit
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log('Step 2 submitted:', formData);
-    if (onNext) onNext();
+    // Log data pewaris yang disubmit (bisa diganti dengan pengiriman data ke backend)
+    console.log('Data Pewaris submitted:', formData);
+    // Lanjut ke langkah berikutnya
+    if (onNext) onNext(formData);
   };
 
   return (
     <div>
+      {/* Tombol Kembali di luar card */}
       <div className="back-button-wrapper">
         <button className="back-button" onClick={onBack}>← Kembali</button>
       </div>
 
       <div className="form-wrapper">
-        <h2 className="form-title">Pengisian Forum Pengajuan untuk WNI</h2>
+        <h2 className="form-title">Pengisian Formulir Pengajuan untuk WNI</h2>
         <div className="form-container">
-          <h3 className="form-subtitle">Data Keluarga</h3>
+          <h3 className="form-subtitle">Data Pewaris</h3>
           <form onSubmit={handleSubmit}>
+            {/* Input Nama Lengkap Pewaris */}
             <div className="form-field">
-              <label>Jumlah Ahli Waris</label>
+              <label htmlFor="namaPewaris">Nama Lengkap Pewaris</label>
               <input
-                type="number"
-                name="jumlahAhliWaris"
-                value={formData.jumlahAhliWaris}
+                type="text"
+                id="namaPewaris"
+                name="namaPewaris"
+                value={formData.namaPewaris}
                 onChange={handleChange}
                 required
               />
             </div>
+
+            {/* Input Nomor KTP Pewaris (Opsional) */}
             <div className="form-field">
-              <label>Nama Ahli Waris Lainnya</label>
+              <label htmlFor="ktpPewaris">Nomor KTP Pewaris (opsional jika tidak ada)</label>
               <input
                 type="text"
-                name="namaAhliWarisLainnya"
-                value={formData.namaAhliWarisLainnya}
+                id="ktpPewaris"
+                name="ktpPewaris"
+                value={formData.ktpPewaris}
                 onChange={handleChange}
               />
             </div>
 
-            <h4>Data Saksi</h4>
-            <div className="saksi-grid">
-            <div>
-                <label>Nama Saksi 1</label>
-                <input
-                type="text"
-                name="namaSaksi1"
-                value={formData.namaSaksi1}
+            {/* Input Tanggal Wafat Pewaris */}
+            <div className="form-field">
+              <label htmlFor="tanggalWafat">Tanggal Wafat Pewaris</label>
+              <input
+                type="date"
+                id="tanggalWafat"
+                name="tanggalWafat"
+                value={formData.tanggalWafat}
                 onChange={handleChange}
                 required
-                />
-            </div>
-            <div>
-                <label>Nama Saksi 2 (Kalau ada)</label>
-                <input
-                type="text"
-                name="namaSaksi2"
-                value={formData.namaSaksi2}
-                onChange={handleChange}
-                />
-            </div>
+              />
             </div>
 
-            <div className="saksi-grid">
-            <div>
-                <label>NIK Saksi 1</label>
-                <input
-                type="text"
-                name="nikSaksi1"
-                value={formData.nikSaksi1}
+            {/* Input Alamat Terakhir Pewaris */}
+            <div className="form-field">
+              <label htmlFor="alamatTerakhirPewaris">Alamat Terakhir Pewaris</label>
+              <textarea
+                id="alamatTerakhirPewaris"
+                name="alamatTerakhirPewaris"
+                value={formData.alamatTerakhirPewaris}
                 onChange={handleChange}
                 required
-                />
-            </div>
-            <div>
-                <label>NIK Saksi 2 (Kalau ada)</label>
-                <input
-                type="text"
-                name="nikSaksi2"
-                value={formData.nikSaksi2}
-                onChange={handleChange}
-                />
-            </div>
+              />
             </div>
 
-            <div className="saksi-grid">
-            <div>
-                <label>Foto KTP Saksi 1</label>
-                <input
-                type="file"
-                name="fotoKtpSaksi1"
-                accept="application/pdf,image/*"
-                onChange={handleChange}
-                required
-                />
-            </div>
-            <div>
-                <label>Foto KTP Saksi 2</label>
-                <input
-                type="file"
-                name="fotoKtpSaksi2"
-                accept="application/pdf,image/*"
-                onChange={handleChange}
-                />
-            </div>
-            </div>
-
-         <div className="form-buttons">
+            {/* Tombol navigasi */}
+            <div className="form-buttons">
               <button type="button" className="back-button" onClick={onBack}>Kembali</button>
               <button type="submit" className="form-button">Selanjutnya</button>
             </div>
@@ -136,4 +103,4 @@ const PengajuanFormStep2 = ({ onBack, onNext }) => {
   );
 };
 
-export default PengajuanFormStep2;
+export default PengajuanFormPewaris;
