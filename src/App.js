@@ -5,83 +5,95 @@ import Navbar from './components/Navbar';
 import HeroSection from './components/HeroSection';
 import GuideSection from './components/GuideSection';
 import CompleteGuide from './components/CompleteGuide';
-import PengajuanForm from './components/PengajuanForm';
-import PengajuanFormStep2 from './components/PengajuanFormStep2';
-import PengajuanFormStep3 from './components/PengajuanFormStep3';
-import PengajuanFormStep4 from './components/PengajuanFormStep4';
+import PengajuanForm from './components/PengajuanForm'; 
+import PengajuanFormPewaris from './components/PengajuanFormPewaris'; 
+import PengajuanFormStep2 from './components/PengajuanFormStep2'; 
+import PengajuanFormStep3 from './components/PengajuanFormStep3'; 
+import PengajuanFormStep4 from './components/PengajuanFormStep4'; 
+import PengajuanFormWNA from './components/PengajuanFormWNA';
+import PengajuanFormWNA2 from './components/PengajuanFormWNA2';
+import PengajuanFormWNA3 from './components/PengajuanFormWNA3';
+import PengajuanFormWNA4 from './components/PengajuanFormWNA4';
 
-// Import Auth pages
-import Register from './autentikasi/Register';
+// ✅ Tambahkan Auth Pages
 import Login from './autentikasi/Login';
+import Register from './autentikasi/Register';
 
 function App() {
-  // Step 0: Home page
-  // Step 1: Form Step 1
-  // Step 2: Form Step 2
-  // Step 3: Form Step 3
-  // Step 4: Form Step 4 (last)
   const [step, setStep] = useState(0);
+  const [originFlow, setOriginFlow] = useState(null);
 
-  const handleShowForm = () => setStep(1);
+  const displayNotification = (message) => {
+    alert(message);
+  };
+
+  const handleStartWNIForm = () => {
+    setOriginFlow('WNI');
+    setStep(1);
+  };
+
+  const handleStartWNAForm = () => {
+    setOriginFlow('WNA');
+    setStep(101);
+  };
+
   const handleBackToHome = () => setStep(0);
 
-return (
-  <Router>
-    <Navbar />
+  return (
+    <Router>
+      <Navbar />
+      <Routes>
+        {/* ✅ Route utama: berisi semua STEP */}
+        <Route
+          path="/"
+          element={
+            <>
+              {step === 0 && (
+                <>
+                  <HeroSection />
+                  <GuideSection onKirimClick={handleStartWNIForm} onKirimWnaClick={handleStartWNAForm} />
+                  <CompleteGuide onKirimClick={handleStartWNIForm} onKirimWnaClick={handleStartWNAForm} />
+                </>
+              )}
 
-    <Routes>
-      <Route
-        path="/"
-        element={
-          <>
-            {step === 0 && (
-              <>
-                <HeroSection />
-                <GuideSection onKirimClick={handleShowForm} />
-                <CompleteGuide onKirimClick={handleShowForm} />
-              </>
-            )}
+              {/* WNI */}
+              {step === 1 && <PengajuanForm onBack={handleBackToHome} onNext={() => setStep(2)} />}
+              {step === 2 && <PengajuanFormPewaris onBack={() => setStep(1)} onNext={() => setStep(3)} />}
+              {step === 3 && <PengajuanFormStep2 onBack={() => setStep(2)} onNext={() => setStep(4)} />}
+              {step === 4 && <PengajuanFormStep3 onBack={() => setStep(3)} onNext={() => setStep(5)} />}
 
-            {step === 1 && (
-              <PengajuanForm
-                onBack={handleBackToHome}
-                onNext={() => setStep(2)}
-              />
-            )}
+              {/* WNA */}
+              {step === 101 && <PengajuanFormWNA onBack={handleBackToHome} onNext={() => setStep(102)} />}
+              {step === 102 && <PengajuanFormWNA2 onBack={() => setStep(101)} onNext={() => setStep(103)} />}
+              {step === 103 && <PengajuanFormWNA3 onBack={() => setStep(102)} onNext={() => setStep(104)} />}
+              {step === 104 && <PengajuanFormWNA4 onBack={() => setStep(103)} onNext={() => setStep(5)} />}
 
-            {step === 2 && (
-              <PengajuanFormStep2
-                onBack={() => setStep(1)}
-                onNext={() => setStep(3)}
-              />
-            )}
+              {/* FINAL STEP */}
+              {step === 5 && (
+                <PengajuanFormStep4
+                  onBack={() => {
+                    if (originFlow === 'WNA') {
+                      setStep(104);
+                    } else {
+                      setStep(4);
+                    }
+                  }}
+                  onSubmit={() => {
+                    displayNotification('Pengajuan berhasil diajukan!');
+                    setStep(0);
+                  }}
+                />
+              )}
+            </>
+          }
+        />
 
-            {step === 3 && (
-              <PengajuanFormStep3
-                onBack={() => setStep(2)}
-                onNext={() => setStep(4)}
-              />
-            )}
-
-            {step === 4 && (
-              <PengajuanFormStep4
-                onBack={() => setStep(3)}
-                onSubmit={() => {
-                  alert('Pengajuan berhasil diajukan!');
-                  setStep(0);
-                }}
-              />
-            )}
-          </>
-        }
-      />
-
-      <Route path="./autentikasi/Register.js" element={<Register />} />
-      <Route path="./autentikasi/Login.js" element={<Login />} />
-    </Routes>
-  </Router>
-);
-
+        {/* ✅ Tambahkan route Login & Register */}
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+      </Routes>
+    </Router>
+  );
 }
 
 export default App;
