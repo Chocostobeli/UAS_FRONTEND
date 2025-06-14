@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 import '../styles/Form.css';
 
-const PengajuanFormPewaris = ({ onBack, onNext }) => {
+const PengajuanFormStep2 = ({ onBack, onNext }) => {
   // State untuk menyimpan data pewaris
   const [formData, setFormData] = useState({
     namaPewaris: '',

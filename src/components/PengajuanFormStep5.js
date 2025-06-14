@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import '../styles/Form.css';
 
-const PengajuanFormStep4 = ({ onBack, onSubmit }) => {
+const PengajuanFormStep5 = ({ onBack, onSubmit }) => {
   const [formData, setFormData] = useState({
     opsiPengiriman: '',
     nama: '',
@@ -19,7 +19,7 @@ const PengajuanFormStep4 = ({ onBack, onSubmit }) => {
 
   const handleFormSubmit = (e) => {
     e.preventDefault();
-    console.log('Step 4 submitted:', formData);
+    console.log('Step 5 submitted:', formData);
     if (onSubmit) onSubmit(formData);
   };
 

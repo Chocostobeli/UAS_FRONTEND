@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import '../styles/Form.css';
 
-const PengajuanFormStep3 = ({ onBack, onNext }) => {
+const PengajuanFormStep4 = ({ onBack, onNext }) => {
   const [formData, setFormData] = useState({
     suratKematian: '',
     ktpAhliWaris: '',

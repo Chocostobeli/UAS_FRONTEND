@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import '../styles/Form.css';
 
-const PengajuanFormStep2 = ({ onBack, onNext }) => {
+const PengajuanFormStep3 = ({ onBack, onNext }) => {
   const [formData, setFormData] = useState({
     jumlahAhliWaris: '',
     namaAhliWarisLainnya: '',
@@ -23,7 +23,7 @@ const PengajuanFormStep2 = ({ onBack, onNext }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log('Step 2 submitted:', formData);
+    console.log('Step 3 submitted:', formData);
     if (onNext) onNext();
   };
 
