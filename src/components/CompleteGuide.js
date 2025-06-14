@@ -1,7 +1,8 @@
 import React from 'react';
+
 import '../styles/CompleteGuide.css';
 
-const CompleteGuide = ({ onKirimClick }) => {
+const CompleteGuide = ({ onKirimClick, onKirimWnaClick }) => { 
   return (
     <section id="pengajuan" className="guide-container">
       <h2 className="guide-title">
@@ -23,7 +24,7 @@ const CompleteGuide = ({ onKirimClick }) => {
             Kedua, datanglah ke kantor kelurahan terdekat dan bawa dokumen tersebut. Petugas akan melakukan verifikasi dan memberikan nomor registrasi. Setelah itu, ajukan ke camat untuk ditandatangani.
           </p>
           <button className="submit-button" onClick={onKirimClick}>
-            Kirim Pengajuan
+            Kirim Pengajuan (WNI)
           </button>
         </div>
 
@@ -41,8 +42,8 @@ const CompleteGuide = ({ onKirimClick }) => {
           <p>
             Dokumen dibawa ke kantor kelurahan, diverifikasi lalu camat akan menandatangani dan menerbitkan pengesahan.
           </p>
-          <button className="submit-button" onClick={onKirimClick}>
-            Kirim Pengajuan
+          <button className="submit-button" onClick={onKirimWnaClick}> {/* Tombol baru */}
+            Kirim Pengajuan (WNI Tionghoa & Asing)
           </button>
         </div>
       </div>
@@ -51,3 +52,4 @@ const CompleteGuide = ({ onKirimClick }) => {
 };
 
 export default CompleteGuide;
+
