@@ -20,6 +20,9 @@ const AdminProfile = () => {
         <Link to="/admin/pengajuan">
           <button className="sidebar-btn">Pengajuan</button>
         </Link>
+        <Link to="/admin/riwayat"> 
+          <button className="sidebar-btn">Riwayat Aktivitas</button>
+        </Link>
       </aside>
 
       <main className="user-main">
