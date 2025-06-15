@@ -1,3 +1,4 @@
+/* src/Admin/Modal.css */
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -11,32 +12,135 @@
   z-index: 999;
 }
 
-.modal-content {
-  background: white;
-  padding: 30px;
-  border-radius: 10px;
-  width: 600px;
-  max-width: 90%;
+.modal-container {
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  width: 90%; /* Sesuaikan lebar */
+  max-width: 800px; /* Lebar maksimum modal */
+  max-height: 90vh; /* Tinggi maksimum modal */
+  overflow-y: auto; /* Aktifkan scroll jika konten melebihi tinggi */
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-  position: relative;
+  position: relative; /* Penting untuk posisi tombol close */
 }
 
-.modal-content h3 {
-  margin-top: 0;
-  margin-bottom: 20px;
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 15px;
+  margin-bottom: 15px;
 }
 
-.modal-section > div {
-  margin-bottom: 12px;
-  font-size: 14px;
+.modal-header h2 {
+  margin: 0;
+  font-size: 1.5rem;
+  color: #333;
 }
 
-.close-button {
-  position: absolute;
-  right: 16px;
-  top: 16px;
+.modal-close-btn {
   background: none;
   border: none;
-  font-size: 22px;
+  font-size: 28px;
   cursor: pointer;
+  color: #888;
+  padding: 5px 10px;
+}
+
+.modal-close-btn:hover {
+  color: #333;
+}
+
+.modal-body {
+  padding-top: 10px;
+}
+
+.detail-section {
+  margin-bottom: 25px;
+  padding: 15px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+}
+
+.detail-section h4 {
+  margin-top: 0;
+  margin-bottom: 15px;
+  color: #0047ff; /* Warna biru untuk sub-judul */
+  font-size: 1.1rem;
+}
+
+/* Menggunakan kembali form-field dari Form.css */
+/* Menyesuaikan display untuk label dan p di modal */
+.modal-body .form-field {
+  display: flex;
+  flex-direction: row; /* Ubah ke baris */
+  align-items: baseline; /* Sejajarkan teks */
+  margin-bottom: 8px;
+}
+
+.modal-body .form-field label {
+  font-weight: bold;
+  margin-right: 10px; /* Jarak antara label dan nilai */
+  min-width: 150px; /* Lebar minimum untuk label agar rapi */
+  color: #555;
+}
+
+.modal-body .form-field p {
+  margin: 0;
+  flex-grow: 1; /* Biarkan paragraf mengambil sisa ruang */
+  word-break: break-word; /* Memecah kata panjang */
+}
+
+.pdf-button {
+  display: inline-flex;
+  align-items: center;
+  background-color: #0047ff;
+  color: white;
+  padding: 6px 12px;
+  border-radius: 5px;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 0.9em;
+  transition: background-color 0.2s ease;
+}
+
+.pdf-button:hover {
+  background-color: #0038cc;
+}
+
+.pdf-icon {
+  margin-right: 5px;
+  font-size: 1.2em;
+}
+
+/* Untuk grid saksi di dalam modal */
+.modal-body .form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
+@media (max-width: 600px) {
+  .modal-container {
+    width: 95%;
+    padding: 15px;
+  }
+  .modal-header h2 {
+    font-size: 1.2rem;
+  }
+  .modal-body .form-field {
+    flex-direction: column; /* Kembali ke kolom di layar kecil */
+    align-items: flex-start;
+  }
+  .modal-body .form-field label {
+    margin-bottom: 5px;
+    min-width: unset;
+  }
+  .modal-body .form-grid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
 }
