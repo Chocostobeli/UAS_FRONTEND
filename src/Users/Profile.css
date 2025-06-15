@@ -244,3 +244,21 @@
   background: #f8d7da;
   color: #721c24;
 }
+.detail-button {
+  background: none; 
+  border: none;      
+  color: #0047ff;   
+  cursor: pointer;
+  text-decoration: underline; 
+  padding: 0;        
+  font-size: inherit; 
+}
+
+.detail-button:hover {
+  color: #0038cc; 
+}
+
+.status.process { 
+  background: #cce5ff;
+  color: #004085;
+}
