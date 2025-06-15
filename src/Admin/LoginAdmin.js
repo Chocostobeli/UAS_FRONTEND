@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import '../Autentikasi/Auth.css';
+import '../autentikasi/Auth.css';
 import loginImage from '../assets/Dokumenty.jpeg';
 
 const LoginAdmin = () => {
@@ -12,11 +12,11 @@ const LoginAdmin = () => {
   const handleLogin = (e) => {
     e.preventDefault();
 
-    // Ini hanya simulasi. Nantinya hubungkan ke backend dengan validasi role "admin". hanya untuk testing FE sementara yeahh
+    // Simulasi login admin
     const fakeAdmin = { email, role: 'admin' };
     localStorage.setItem('admin', JSON.stringify(fakeAdmin));
     alert('Login admin berhasil!');
-    navigate('/admin/dashboard'); // nanti diarahkan ke dashboard admin
+    navigate('/admin/profile'); // Arahkan ke halaman dashboard admin
   };
 
   return (
@@ -45,11 +45,16 @@ const LoginAdmin = () => {
                 onChange={(e) => setPassword(e.target.value)}
                 required
               />
-              <span className="toggle-password" onClick={() => setShowPassword(!showPassword)}>
+              <span
+                className="toggle-password"
+                onClick={() => setShowPassword(!showPassword)}
+              >
                 {showPassword ? '🙈' : '👁️'}
               </span>
             </div>
-            <button type="submit" className="auth-button">Login</button>
+            <button type="submit" className="auth-button">
+              Login
+            </button>
           </form>
         </div>
       </div>

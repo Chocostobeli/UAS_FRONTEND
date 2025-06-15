@@ -210,3 +210,37 @@
   background: #f8d7da;
   color: #721c24;
 }
+
+/* Dropdown status warna-warni */
+.status-dropdown {
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: bold;
+  border: none;
+  appearance: none;
+  cursor: pointer;
+  outline: none;
+  text-align: center;
+}
+
+/* Warna sesuai status */
+.status-dropdown.pending {
+  background: #fff3cd;
+  color: #856404;
+}
+
+.status-dropdown.process {
+  background: #cce5ff;
+  color: #004085;
+}
+
+.status-dropdown.approved {
+  background: #d4edda;
+  color: #155724;
+}
+
+.status-dropdown.rejected {
+  background: #f8d7da;
+  color: #721c24;
+}

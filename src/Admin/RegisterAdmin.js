@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import '../Autentikasi/Auth.css';
+import '../autentikasi/Auth.css';
 import registerImage from '../assets/Dokumenty.jpeg';
 
 const RegisterAdmin = () => {
