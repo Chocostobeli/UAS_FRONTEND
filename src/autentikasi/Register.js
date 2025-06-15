@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import './Auth.css';
 import registerImage from '../assets/Dokumenty.jpeg';
 
@@ -11,24 +12,41 @@ const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [agreed, setAgreed] = useState(false);
+  const [error, setError] = useState('');
   const navigate = useNavigate();
 
-  const handleRegister = (e) => {
+  const handleRegister = async (e) => {
     e.preventDefault();
+    setError('');
 
     if (password !== confirmPassword) {
-      alert('Password tidak cocok!');
+      setError('Password tidak cocok!');
       return;
     }
 
     if (!agreed) {
-      alert('Anda harus menyetujui syarat dan ketentuan.');
+      setError('Anda harus menyetujui syarat dan ketentuan.');
       return;
     }
 
-    localStorage.setItem('user', JSON.stringify({ fullName, email }));
-    alert('Registrasi berhasil!');
-    navigate('/login');
+    try {
+      const res = await axios.post('http://localhost:5000/api/register', {
+        fullName,
+        email,
+        password
+      });
+
+      if (res.status === 201 || res.status === 200) {
+        alert('Registrasi berhasil!');
+        navigate('/login');
+      }
+    } catch (err) {
+      if (err.response && err.response.data && err.response.data.message) {
+        setError(err.response.data.message);
+      } else {
+        setError('Terjadi kesalahan saat registrasi.');
+      }
+    }
   };
 
   return (
@@ -99,6 +117,7 @@ const Register = () => {
             </label>
             <button type="submit" className="auth-button">Register</button>
           </form>
+          {error && <p style={{ color: 'red', marginTop: '10px' }}>{error}</p>}
           <p className="auth-link">
             Already have an account? <Link to="/login">Login</Link>
           </p>
