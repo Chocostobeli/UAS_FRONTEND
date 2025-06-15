@@ -1,0 +1,212 @@
+.user-container {
+  display: flex;
+  min-height: 100vh;
+  font-family: sans-serif;
+  background-color: #f5f5f5;
+}
+
+.user-sidebar {
+  width: 200px;
+  background: #0025ff;
+  color: #fff;
+  padding: 40px 20px; /* Atas bawah diberi jarak */
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+}
+
+.user-sidebar h2 {
+  margin-bottom: 40px;
+  font-size: 24px;
+}
+
+.sidebar-btn {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: none;
+  border-radius: 8px;
+  background-color: transparent;
+  color: #fff;
+  cursor: pointer;
+  text-align: left;
+  font-weight: bold;
+  transition: 0.3s;
+}
+
+.sidebar-btn.active,
+.sidebar-btn:hover {
+  background: #fff;
+  color: #0025ff;
+}
+
+.user-main {
+  flex: 1;
+  padding: 30px;
+}
+
+/* Card untuk navbar */
+.navbar-card {
+  background: #fff;
+  padding: 16px 24px;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+}
+
+.user-navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: bold;
+}
+
+.logout-btn {
+  background: red;
+  color: #fff;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: 0.3s;
+}
+
+.user-card {
+  background: #fff;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.profile-content {
+  display: flex;
+  flex-direction: row;
+  gap: 30px;
+}
+
+.profile-photo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 150px;
+}
+
+.profile-photo img {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.upload-btn {
+  margin-top: 10px;
+  background: #0025ff;
+  color: #fff;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.profile-form {
+  flex: 1;
+}
+
+.profile-form label {
+  display: block;
+  margin-top: 10px;
+  font-weight: bold;
+}
+
+.profile-form input {
+  width: 100%;
+  padding: 8px;
+  margin-top: 4px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.verified {
+  color: green;
+  font-size: 14px;
+  margin-top: 4px;
+}
+
+.radio-group {
+  display: flex;
+  gap: 20px;
+  margin-top: 10px;
+  align-items: center;
+}
+
+.radio-option {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 30px;
+}
+
+.save-btn {
+  background: #0025ff;
+  color: #fff;
+  border: none;
+  padding: 10px 24px;
+  border-radius: 20px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+/* Tabel Pengajuan */
+.table-container {
+  overflow-x: auto;
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.data-table th,
+.data-table td {
+  padding: 12px 16px;
+  text-align: left;
+  font-size: 14px;
+  border: none; /* tidak ada border */
+}
+
+.data-table tbody tr {
+  border-bottom: 1px solid #eee; /* garis bawah halus */
+}
+
+/* Badge status */
+.status {
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: bold;
+  display: inline-block;
+}
+
+.status.pending {
+  background: #fff3cd;
+  color: #856404;
+}
+
+.status.approved {
+  background: #d4edda;
+  color: #155724;
+}
+
+.status.rejected {
+  background: #f8d7da;
+  color: #721c24;
+}
