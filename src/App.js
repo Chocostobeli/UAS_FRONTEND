@@ -33,6 +33,24 @@ function App() {
           }
         />
 
+        {/* Login & Register untuk Admin tanpa navbar*/}
+        <Route
+      path="/login-admin"
+      element={
+        <AuthLayout>
+          <LoginAdmin />
+        </AuthLayout>
+      }
+    />
+      <Route
+      path="/admin/register"
+      element={
+        <AuthLayout>
+          <RegisterAdmin />
+        </AuthLayout>
+      }
+    />
+    
         {/* Home pakai Navbar */}
         <Route
           path="/"
