@@ -1,3 +1,4 @@
+// server.js
 const express = require('express');
 const cors = require('cors');
 require('dotenv').config();
@@ -6,11 +7,14 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Import route pengajuan umum
+// ✅ ROUTES
+const authRoutes = require('./routes/authRoutes');
+app.use('/api/auth', authRoutes); // endpoint: /api/auth/register dan /api/auth/login
+
+// Rute lainnya...
 const pengajuanRoutes = require('./routes/pengajuanRoutes');
 app.use('/api/pengajuan', pengajuanRoutes);
 
-// ✅ Tambahkan route untuk pengajuan WNA
 const pengajuanWNARoutes = require('./routes/pengajuanWNA');
 app.use('/api/pengajuan-wna', pengajuanWNARoutes);
 
