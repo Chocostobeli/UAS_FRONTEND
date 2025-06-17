@@ -39,7 +39,7 @@ function App() {
 
         {/* Login & Register Admin */}
         <Route
-          path="/login-admin"
+          path="/admin/login"
           element={
             <AuthLayout>
               <LoginAdmin />

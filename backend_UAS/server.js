@@ -7,9 +7,14 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+app.get('/', (req, res) => {
+  res.send('API is running...');
+});
+
+
 // ✅ ROUTES
 const authRoutes = require('./routes/authRoutes');
-app.use('/api/auth', authRoutes); // endpoint: /api/auth/register dan /api/auth/login
+app.use('/api', authRoutes); // endpoint: /api/auth/register dan /api/auth/login
 
 // Rute lainnya...
 const pengajuanRoutes = require('./routes/pengajuanRoutes');

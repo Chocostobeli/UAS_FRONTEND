@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../autentikasi/Auth.css';
 import registerImage from '../assets/Dokumenty.jpeg';
+import axios from 'axios';
 
 const RegisterAdmin = () => {
   const [fullName, setFullName] = useState('');
@@ -13,7 +14,7 @@ const RegisterAdmin = () => {
   const [adminCode, setAdminCode] = useState('');
   const navigate = useNavigate();
 
-  const handleRegister = (e) => {
+  const handleRegister = async (e) => {
     e.preventDefault();
 
     if (password !== confirmPassword) {
@@ -26,10 +27,25 @@ const RegisterAdmin = () => {
       return;
     }
 
-    // Simulasi penyimpanan data admin
-    localStorage.setItem('admin', JSON.stringify({ fullName, email }));
-    alert('Registrasi Admin berhasil!');
-    navigate('/login-admin');
+    
+        try {
+      const res = await axios.post('http://localhost:5000/api/register', {
+        fullName,
+        email,
+        password
+      });
+
+    if (res.status === 201 || res.status === 200) {
+      alert('Registrasi Admin berhasil!');
+      navigate('/admin/login');
+    }
+  }catch (err) {
+      if (err.response && err.response.data && err.response.data.message) {
+        setError(err.response.data.message);
+      } else {
+        setError('Terjadi kesalahan saat registrasi.');
+      }
+    }
   };
 
   return (
