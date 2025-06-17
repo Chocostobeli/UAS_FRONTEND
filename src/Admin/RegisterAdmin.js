@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import '../autentikasi/Auth.css';
 import registerImage from '../assets/Dokumenty.jpeg';
 import axios from 'axios';
@@ -12,10 +12,12 @@ const RegisterAdmin = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [adminCode, setAdminCode] = useState('');
+  const [error, setError] = useState('');
   const navigate = useNavigate();
 
   const handleRegister = async (e) => {
     e.preventDefault();
+    setError('');
 
     if (password !== confirmPassword) {
       alert('Password tidak cocok!');
@@ -27,9 +29,8 @@ const RegisterAdmin = () => {
       return;
     }
 
-    
-        try {
-      const res = await axios.post('http://localhost:5000/api/register', {
+    try {
+      const res = await axios.post('http://localhost:5000/api/admin/register', {
         fullName,
         email,
         password

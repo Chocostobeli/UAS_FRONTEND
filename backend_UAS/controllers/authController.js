@@ -31,6 +31,34 @@ exports.register = async (req, res) => {
   }
 };
 
+exports.registeradmin = async (req, res) => {
+  try {
+    const { fullName, email, password } = req.body;
+
+    const existingUser = await User.findOne({ where: { email } });
+    if (existingUser) {
+      return res.status(400).json({ message: 'Email sudah digunakan' });
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const newUser = await User.create({
+      fullName,
+      email,
+      password: hashedPassword,
+      role: 'admin',
+      createdAt: new Date(),
+      updatedAt: new Date()
+    });
+
+    const { password: _, ...userWithoutPassword } = newUser.toJSON();
+    res.status(201).json({ message: 'Registrasi berhasil', user: userWithoutPassword });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Terjadi kesalahan saat registrasi' });
+  }
+};
+
 exports.login = async (req, res) => {
   try {
     const { email, password } = req.body;
