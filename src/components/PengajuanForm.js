@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import '../styles/Form.css';
 
-const PengajuanForm = ({ onNext, initialData }) => {
+const PengajuanForm = ({ onNext, initialData,  }) => {
   const [formData, setFormData] = useState(initialData);
 
   useEffect(() => {
@@ -16,6 +16,7 @@ const PengajuanForm = ({ onNext, initialData }) => {
     e.preventDefault();
     onNext(formData); // Kirim data kembali ke parent
   };
+
 
   return (
     <div>
@@ -93,7 +94,6 @@ const PengajuanForm = ({ onNext, initialData }) => {
                 required
               />
             </div>
-
             <button className="form-button" type="submit">Selanjutnya</button>
           </form>
         </div>

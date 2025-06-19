@@ -65,6 +65,8 @@ const PengajuanPage = () => {
     setCurrentStep((prevStep) => prevStep - 1);
   };
 
+
+
   const handleSubmit = async (finalData) => {
     const allData = { ...formData, ...finalData };
     console.log('Final Data to Submit:', allData);

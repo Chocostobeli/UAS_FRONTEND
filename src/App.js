@@ -14,7 +14,7 @@ import AdminRiwayat from './Admin/AdminRiwayat';
 import AuthLayout from './layouts/AuthLayout';
 import MainLayout from './layouts/MainLayout';
 import PengajuanPage from './pages/PengajuanPage';
-
+import PengajuanWNAPage from './pages/PengajuanWNAPage';
 
 function App() {
   return (
@@ -76,6 +76,7 @@ function App() {
         <Route path="/admin/pengajuan" element={<AdminPengajuan />} />
         <Route path="/admin/riwayat" element={<AdminRiwayat />} />
         <Route path="/pengajuan" element={<PengajuanPage />} />
+        <Route path="/pengajuan-wna" element={<PengajuanWNAPage />} />
 
       </Routes>
     </Router>
