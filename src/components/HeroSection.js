@@ -7,14 +7,14 @@ const HeroSection = () => {
   const guideRef = useRef(null);
 
   const handleScroll = () => {
-    const section = document.getElementById('panduan');
+    const section = document.getElementById('pengajuan');
     if (section) {
       section.scrollIntoView({ behavior: 'smooth' });
     }
   };
 
   return (
-    <section className="hero">
+    <section id="home" className="hero">
       <div className="container">
         <div className="hero-text">
           <p className="tagline">Layanan Ahli Waris Online dengan Standar Notaris</p>

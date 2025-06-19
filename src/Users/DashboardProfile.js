@@ -56,6 +56,10 @@ const DashboardProfile = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const konfirmasi = window.confirm('Apakah Anda yakin ingin menyimpan perubahan profil?');
+
+    if (!konfirmasi) return; // Jika user klik "Cancel", hentikan proses
+
     const token = localStorage.getItem('token');
     const data = new FormData();
 
@@ -78,8 +82,7 @@ const DashboardProfile = () => {
     }
   };
 
-  const handleLogout = () => {
-    localStorage.removeItem('token');
+  const backbutton = () => {
     navigate('/');
   };
 
@@ -99,7 +102,7 @@ const DashboardProfile = () => {
         <div className="navbar-card">
           <div className="user-navbar">
             <span>Selamat Datang, {formData.namaLengkap || 'nama'}</span>
-            <button className="logout-btn" onClick={handleLogout}>Logout</button>
+            <button className="logout-btn" onClick={backbutton}>Kembali</button>
           </div>
         </div>
 

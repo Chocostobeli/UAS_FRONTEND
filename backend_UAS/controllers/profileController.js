@@ -40,3 +40,30 @@ exports.updateProfile = async (req, res) => {
     res.status(500).json({ message: 'Gagal memperbarui profil', error: error.message });
   }
 };
+
+exports.updateProfileAdmin = async (req, res) => {
+  try {
+    const adminId = req.user.id;
+    const { namaLengkap, email, whatsapp, alamat, ttl, jenisKelamin } = req.body;
+
+    const admin = await User.findByPk(adminId);
+    if (!admin) return res.status(404).json({ message: 'Admin tidak ditemukan' });
+
+    admin.fullName = namaLengkap;
+    admin.email = email;
+    admin.whatsapp = whatsapp;
+    admin.alamat = alamat;
+    admin.ttl = ttl;
+    admin.jenisKelamin = jenisKelamin;
+
+    if (req.file) {
+      admin.foto = `/uploads/profileUser/${req.file.filename}`;
+    }
+
+    await admin.save();
+
+    res.json({ message: 'Profil Admin berhasil diperbarui', admin });
+  } catch (error) {
+    res.status(500).json({ message: 'Gagal memperbarui profil Admin', error: error.message });
+  }
+};

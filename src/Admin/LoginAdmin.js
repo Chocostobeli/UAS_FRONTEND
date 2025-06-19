@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import '../autentikasi/Auth.css';
 import loginImage from '../assets/Dokumenty.jpeg';
 
@@ -7,16 +8,34 @@ const LoginAdmin = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState('');
   const navigate = useNavigate();
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
+    setError('');
 
-    // Simulasi login admin
-    const fakeAdmin = { email, role: 'admin' };
-    localStorage.setItem('admin', JSON.stringify(fakeAdmin));
+    try {
+      const res = await axios.post('http://localhost:5000/api/login', {
+        email,
+        password,
+      });
+
+      const { token, admin } = res.data;
+
+      // Simpan token dan user ke localStorage (atau sessionStorage)
+      localStorage.setItem('token', token);
+      localStorage.setItem('admin', JSON.stringify(admin));
+
     alert('Login admin berhasil!');
-    navigate('/admin/profile'); // Arahkan ke halaman dashboard admin
+    navigate('/admin/pengajuan'); // Arahkan ke halaman dashboard admin
+  }catch (err) {
+      if (err.response && err.response.data && err.response.data.message) {
+        setError(err.response.data.message);
+      } else {
+        setError('Error Mencoba Login Admin');
+      }
+    }
   };
 
   return (
@@ -52,10 +71,13 @@ const LoginAdmin = () => {
                 {showPassword ? '🙈' : '👁️'}
               </span>
             </div>
-            <button type="submit" className="auth-button">
-              Login
-            </button>
+            <button type="submit" className="auth-button">Login</button>
           </form>
+          {error && <p style={{ color: 'red', marginTop: '10px' }}>{error}</p>}
+          <p className="auth-link">
+            Daftar Admin Baru <Link to="../admin/register">Register</Link>
+          </p>
+
         </div>
       </div>
     </div>
