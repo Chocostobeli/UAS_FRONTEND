@@ -1,41 +1,76 @@
-import React from 'react';
-import './Profile.css';
+import React, { useState, useEffect } from 'react';
+import './Profile.css'; // Pastikan CSS ini ada
 import { Link, useNavigate } from 'react-router-dom';
+import axios from 'axios';
+
+const API_BASE_URL = 'http://localhost:5000/api'; // Sesuaikan dengan base URL API Anda
 
 const DashboardPengajuan = () => {
   const navigate = useNavigate();
+  const [dataPengajuan, setDataPengajuan] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [userEmail, setUserEmail] = useState('');
+  const [userName, setUserName] = useState(''); // State untuk nama pengguna
 
-  const dataPengajuan = [
-    {
-      nama: 'Putri Aulia',
-      kategori: 'Pengajuan surat WNI Tionghoa & Negara Asing',
-      tanggal: '2025-06-15',
-      status: 'Pending',
-    },
-    {
-      nama: 'Rafi Ahmad',
-      kategori: 'Pengajuan surat WNI',
-      tanggal: '2025-06-14',
-      status: 'Disetujui',
-    },
-    {
-      nama: 'Dinda Maya',
-      kategori: 'Pengajuan surat WNI',
-      tanggal: '2025-06-13',
-      status: 'Ditolak',
-    },
-  ];
+  useEffect(() => {
+    const fetchUserDataAndSubmissions = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+
+        // Ambil data user dari localStorage
+        const userString = localStorage.getItem('user');
+        const token = localStorage.getItem('token');
+
+        if (!userString || !token) {
+          setError('Anda harus login untuk melihat pengajuan.');
+          setLoading(false);
+          // Redirect ke halaman login jika tidak ada token atau user
+          navigate('/login');
+          return;
+        }
+
+        const user = JSON.parse(userString);
+        setUserEmail(user.email);
+        setUserName(user.fullName); // Set nama pengguna
+
+        // Fetch data pengajuan
+        const response = await axios.get(`${API_BASE_URL}/dashboard/submissions`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        setDataPengajuan(response.data);
+      } catch (err) {
+        console.error('Error fetching pengajuan:', err);
+        if (err.response && (err.response.status === 401 || err.response.status === 403)) {
+          setError('Sesi Anda telah berakhir atau token tidak valid. Silakan login kembali.');
+          localStorage.removeItem('token');
+          localStorage.removeItem('user');
+          localStorage.removeItem('userEmail');
+          navigate('/login');
+        } else {
+          setError('Gagal memuat data pengajuan. Silakan coba lagi nanti.');
+        }
+        setDataPengajuan([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchUserDataAndSubmissions();
+  }, [navigate]); // Tambahkan navigate sebagai dependency
 
   const getStatusClass = (status) => {
-    if (status === 'Pending') return 'status pending';
-    if (status === 'Disetujui') return 'status approved';
-    if (status === 'Ditolak') return 'status rejected';
+    if (status === 'pending') return 'status pending';
+    if (status === 'approved') return 'status approved';
+    if (status === 'rejected') return 'status rejected';
     return '';
   };
 
-  const handleLogout = () => {
-    // Tambahkan logika logout kalau ada (hapus token, dll)
-    navigate('/');
+  const backbutton = () => {
+    navigate('/'); // Redirect ke halaman login
   };
 
   return (
@@ -49,35 +84,42 @@ const DashboardPengajuan = () => {
       <main className="user-main">
         <div className="navbar-card">
           <div className="user-navbar">
-            <span>Selamat Datang, nama</span>
-            <button className="logout-btn" onClick={handleLogout}>Logout</button>
+            <span>Selamat Datang, {userName || 'Pengguna'}</span> {/* Tampilkan nama pengguna */}
+            <button className="logout-btn" onClick={backbutton}>Kembali</button>
           </div>
         </div>
 
         <div className="user-card">
-          <h3>Daftar Pengajuan</h3>
-          <div className="table-container">
-            <table className="data-table">
-              <thead>
-                <tr>
-                  <th>Nama</th>
-                  <th>Kategori</th>
-                  <th>Tanggal</th>
-                  <th>Status</th>
-                </tr>
-              </thead>
-              <tbody>
-                {dataPengajuan.map((item, index) => (
-                  <tr key={index}>
-                    <td>{item.nama}</td>
-                    <td>{item.kategori}</td>
-                    <td>{item.tanggal}</td>
-                    <td><span className={getStatusClass(item.status)}>{item.status}</span></td>
+          <h3>Daftar Pengajuan Anda ({userEmail})</h3>
+          {loading && <p>Memuat data pengajuan...</p>}
+          {error && <p className="error-message">{error}</p>}
+          {!loading && !error && dataPengajuan.length === 0 && (
+            <p>Anda belum memiliki pengajuan yang diajukan.</p>
+          )}
+          {!loading && !error && dataPengajuan.length > 0 && (
+            <div className="table-container">
+              <table className="data-table">
+                <thead>
+                  <tr>
+                    <th>Nama Ahli Waris</th>
+                    <th>Kategori</th>
+                    <th>Tanggal Pengajuan</th>
+                    <th>Status</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                </thead>
+                <tbody>
+                  {dataPengajuan.map((item) => (
+                    <tr key={item.id}>
+                      <td>{item.nama}</td>
+                      <td>{item.kategori}</td>
+                      <td>{new Date(item.tanggal).toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' })}</td>
+                      <td><span className={getStatusClass(item.status)}>{item.status}</span></td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
         </div>
       </main>
     </div>

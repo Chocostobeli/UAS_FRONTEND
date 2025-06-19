@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import axios from 'axios'; // Tambahan buat connect ke BE
+import axios from 'axios';
 import './Auth.css';
 import loginImage from '../assets/Dokumenty.jpeg';
 
@@ -23,9 +23,11 @@ const Login = () => {
 
       const { token, user } = res.data;
 
-      // Simpan token dan user ke localStorage (atau sessionStorage)
+      // Simpan token dan user ke localStorage
       localStorage.setItem('token', token);
       localStorage.setItem('user', JSON.stringify(user));
+      // Simpan email pengguna yang login
+      localStorage.setItem('userEmail', user.email); // ✅ Tambahan ini
 
       alert('Login sukses!');
       navigate('/');
