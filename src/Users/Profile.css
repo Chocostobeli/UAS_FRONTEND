@@ -1,264 +1,393 @@
+/* src/Users/Profile.css */
+
+/* Kontainer utama untuk layout sidebar dan main content */
 .user-container {
-  display: flex;
-  min-height: 100vh;
-  font-family: sans-serif;
-  background-color: #f5f5f5;
+    display: flex;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Opsional: Sesuaikan font */
+    background-color: #f0f2f5; /* Warna latar belakang halaman, lebih terang */
+    min-height: 100vh;
 }
 
+/* Sidebar Styling */
 .user-sidebar {
-  width: 200px;
-  background: #0025ff;
-  color: #fff;
-  padding: 40px 20px; /* Atas bawah diberi jarak */
-  border-top-right-radius: 10px;
-  border-bottom-right-radius: 10px;
+    width: 250px; /* Sedikit lebih lebar dari 200px agar terlihat lebih lega */
+    background-color: #0025ff; /* Warna biru gelap yang Anda inginkan */
+    color: #fff;
+    padding: 20px; /* Kurangi padding atas/bawah agar lebih proporsional */
+    box-shadow: 2px 0 8px rgba(0,0,0,0.1); /* Bayangan lebih jelas ke kanan */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /* Hilangkan border-top-right-radius dan border-bottom-right-radius jika tidak ingin border melengkung hanya di sisi itu */
+    border-radius: 0; /* Pastikan tidak ada radius yang aneh jika tidak diinginkan */
 }
 
 .user-sidebar h2 {
-  margin-bottom: 40px;
-  font-size: 24px;
+    color: #fff; /* Pastikan teks judul putih */
+    margin-bottom: 30px; /* Sesuaikan margin bawah */
+    font-size: 1.8em; /* Ukuran font lebih besar */
+    font-weight: 600;
 }
 
 .sidebar-btn {
-  display: block;
-  width: 100%;
-  padding: 10px;
-  margin-bottom: 10px;
-  border: none;
-  border-radius: 8px;
-  background-color: transparent;
-  color: #fff;
-  cursor: pointer;
-  text-align: left;
-  font-weight: bold;
-  transition: 0.3s;
+    width: 100%;
+    padding: 12px 15px; /* Padding lebih besar */
+    margin-bottom: 10px;
+    background-color: transparent;
+    color: #fff;
+    border: none;
+    border-radius: 8px; /* Sudut sedikit membulat */
+    text-align: left;
+    font-size: 1.05em;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
 }
 
-.sidebar-btn.active,
 .sidebar-btn:hover {
-  background: #fff;
-  color: #0025ff;
+    background-color: rgba(255, 255, 255, 0.15); /* Hover transparan putih */
+    color: #fff;
 }
 
+.sidebar-btn.active {
+    background-color: #fff; /* Latar belakang putih untuk aktif */
+    color: #0025ff; /* Teks biru untuk aktif */
+    font-weight: 600;
+    box-shadow: 0 2px 5px rgba(0, 37, 255, 0.2); /* Bayangan biru */
+}
+
+.sidebar-btn.active:hover {
+    background-color: #f0f0f0; /* Sedikit lebih gelap saat hover aktif */
+    color: #0025ff;
+}
+
+/* Main Content Area */
 .user-main {
-  flex: 1;
-  padding: 30px;
+    flex-grow: 1;
+    padding: 25px 35px; /* Tambah padding agar lebih lega */
+    background-color: #f0f2f5; /* Latar belakang body, konsisten dengan .user-container */
 }
 
-/* Card untuk navbar */
+/* Navbar Card (yang ada "Selamat Datang, Admin") */
 .navbar-card {
-  background: #fff;
-  padding: 16px 24px;
-  border-radius: 10px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-  margin-bottom: 20px;
+    background-color: #ffffff; /* Latar belakang putih */
+    border-radius: 12px; /* Sudut lebih membulat, ini penting untuk tampilan card */
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.12); /* Bayangan yang lebih menonjol */
+    padding: 18px 30px; /* Padding di dalam card, lebih besar */
+    margin-bottom: 25px; /* Jarak bawah dari card selanjutnya */
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 }
 
 .user-navbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-weight: bold;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    color: #333;
+    font-size: 1.15em; /* Ukuran font sedikit lebih besar */
+    font-weight: 500;
 }
 
 .logout-btn {
-  background: red;
-  color: #fff;
-  border: none;
-  padding: 8px 16px;
-  border-radius: 20px;
-  cursor: pointer;
-  font-weight: bold;
-  transition: 0.3s;
+    background-color: #dc3545; /* Merah untuk logout */
+    color: white;
+    padding: 10px 20px; /* Padding lebih besar */
+    border: none;
+    border-radius: 25px; /* Sudut lebih membulat (pill shape) */
+    cursor: pointer;
+    font-size: 1em;
+    transition: background-color 0.3s ease;
+    font-weight: 600; /* Lebih tebal */
 }
 
+.logout-btn:hover {
+    background-color: #c82333; /* Lebih gelap saat hover */
+}
+
+/* User Card (untuk konten seperti "Daftar Pengajuan" atau "Data Diri") */
 .user-card {
-  background: #fff;
-  padding: 30px;
-  border-radius: 10px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    background-color: #ffffff; /* Latar belakang putih */
+    border-radius: 12px; /* Sudut lebih membulat, konsisten dengan navbar card */
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.12); /* Bayangan yang lebih menonjol, konsisten dengan navbar */
+    padding: 30px 40px; /* Padding di dalam card, lebih besar dari sebelumnya */
+    margin-bottom: 20px;
+    box-sizing: border-box;
 }
 
-.profile-content {
-  display: flex;
-  flex-direction: row;
-  gap: 30px;
+.user-card h3 {
+    color: #333;
+    margin-top: 0;
+    margin-bottom: 25px;
+    font-size: 1.6em; /* Ukuran judul sedikit lebih besar */
+    font-weight: 700; /* Lebih tebal */
+    border-bottom: 1px solid #eee; /* Garis bawah pada judul */
+    padding-bottom: 15px;
 }
 
-.profile-photo {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 150px;
-}
-
-.profile-photo img {
-  width: 100px;
-  height: 100px;
-  border-radius: 50%;
-  object-fit: cover;
-}
-
-.upload-btn {
-  margin-top: 10px;
-  background: #0025ff;
-  color: #fff;
-  border: none;
-  padding: 6px 12px;
-  border-radius: 6px;
-  cursor: pointer;
-  font-weight: 500;
-}
-
-.profile-form {
-  flex: 1;
-}
-
-.profile-form label {
-  display: block;
-  margin-top: 10px;
-  font-weight: bold;
-}
-
-.profile-form input {
-  width: 100%;
-  padding: 8px;
-  margin-top: 4px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-}
-
-.verified {
-  color: green;
-  font-size: 14px;
-  margin-top: 4px;
-}
-
-.radio-group {
-  display: flex;
-  gap: 20px;
-  margin-top: 10px;
-  align-items: center;
-}
-
-.radio-option {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.form-actions {
-  display: flex;
-  justify-content: flex-end;
-  margin-top: 30px;
-}
-
-.save-btn {
-  background: #0025ff;
-  color: #fff;
-  border: none;
-  padding: 10px 24px;
-  border-radius: 20px;
-  font-weight: bold;
-  cursor: pointer;
-  transition: 0.3s;
-}
-
-/* Tabel Pengajuan */
+/* Styling untuk tabel */
 .table-container {
-  overflow-x: auto;
+    overflow-x: auto;
 }
 
 .data-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 20px;
+    width: 100%;
+    border-collapse: separate; /* Penting untuk border-radius pada sel */
+    border-spacing: 0;
+    margin-top: 20px;
 }
 
 .data-table th,
 .data-table td {
-  padding: 12px 16px;
-  text-align: left;
-  font-size: 14px;
-  border: none; /* tidak ada border */
+    padding: 12px 18px; /* Padding lebih besar di sel tabel */
+    text-align: left;
+    font-size: 0.95em;
+    border-bottom: 1px solid #f0f0f0; /* Garis pemisah antar baris */
 }
 
-.data-table tbody tr {
-  border-bottom: 1px solid #eee; /* garis bawah halus */
+.data-table th {
+    background-color: #e9ecef;
+    color: #495057;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.85em; /* Sedikit lebih kecil dari td */
 }
 
-/* Badge status */
-.status {
-  padding: 6px 12px;
-  border-radius: 20px;
-  font-size: 12px;
-  font-weight: bold;
-  display: inline-block;
+.data-table tbody tr:hover {
+    background-color: #f8f9fa;
 }
 
-.status.pending {
-  background: #fff3cd;
-  color: #856404;
+/* Tombol Detail */
+.detail-button {
+    background: none;
+    border: none;
+    color: #0047ff; /* Warna biru konsisten */
+    cursor: pointer;
+    text-decoration: underline;
+    padding: 0;
+    font-size: inherit;
+    transition: color 0.2s ease;
 }
 
-.status.approved {
-  background: #d4edda;
-  color: #155724;
+.detail-button:hover {
+    color: #0038cc; /* Biru lebih gelap saat hover */
 }
 
-.status.rejected {
-  background: #f8d7da;
-  color: #721c24;
-}
-
-/* Dropdown status warna-warni */
+/* Dropdown Status */
 .status-dropdown {
-  padding: 6px 12px;
-  border-radius: 20px;
-  font-size: 12px;
-  font-weight: bold;
-  border: none;
-  appearance: none;
-  cursor: pointer;
-  outline: none;
-  text-align: center;
+    padding: 8px 15px; /* Padding lebih besar */
+    border-radius: 20px; /* Bentuk pill */
+    font-size: 0.9em;
+    font-weight: bold;
+    border: 1px solid transparent; /* Border transparan agar warna background terlihat penuh */
+    appearance: none;
+    cursor: pointer;
+    outline: none;
+    text-align: center;
+    background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23000000%22%20d%3D%22M287%2C197.393L146.2%2C56.593L5.4%2C197.393h281.6z%22%2F%3E%3C%2Fsvg%3E'); /* Panah dropdown */
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    background-size: 10px;
+    padding-right: 30px; /* Ruang untuk ikon panah */
 }
 
 /* Warna sesuai status */
 .status-dropdown.pending {
-  background: #fff3cd;
-  color: #856404;
+    background-color: #ffeeba;
+    color: #856404;
+    border-color: #ffc107; /* Border sesuai warna */
 }
 
 .status-dropdown.process {
-  background: #cce5ff;
-  color: #004085;
+    background-color: #cce5ff;
+    color: #004085;
+    border-color: #007bff;
 }
 
 .status-dropdown.approved {
-  background: #d4edda;
-  color: #155724;
+    background-color: #d4edda;
+    color: #155724;
+    border-color: #28a745;
 }
 
 .status-dropdown.rejected {
-  background: #f8d7da;
-  color: #721c24;
-}
-.detail-button {
-  background: none; 
-  border: none;      
-  color: #0047ff;   
-  cursor: pointer;
-  text-decoration: underline; 
-  padding: 0;        
-  font-size: inherit; 
+    background-color: #f8d7da;
+    color: #721c24;
+    border-color: #dc3545;
 }
 
-.detail-button:hover {
-  color: #0038cc; 
+/* Tambahan untuk .status (span yang digunakan di riwayat aktivitas) */
+.status {
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: bold;
+    display: inline-block;
 }
 
-.status.process { 
-  background: #cce5ff;
-  color: #004085;
+.status.pending {
+    background: #fff3cd;
+    color: #856404;
+}
+
+.status.process {
+    background: #cce5ff;
+    color: #004085;
+}
+
+.status.approved {
+    background: #d4edda;
+    color: #155724;
+}
+
+.status.rejected {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+/* --- Styling untuk AdminProfile (form) --- */
+.profile-content {
+    display: flex;
+    flex-direction: row;
+    gap: 40px; /* Jarak antar kolom lebih besar */
+    align-items: flex-start; /* Sejajarkan ke atas */
+}
+
+.profile-photo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 180px; /* Lebar kolom foto */
+    padding-top: 20px;
+}
+
+.profile-photo img {
+    width: 120px; /* Ukuran foto lebih besar */
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid #ddd; /* Border foto */
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.upload-btn {
+    margin-top: 15px;
+    background-color: #0025ff;
+    color: #fff;
+    border: none;
+    padding: 8px 18px;
+    border-radius: 20px; /* Pill shape */
+    cursor: pointer;
+    font-weight: 600;
+    transition: background-color 0.3s ease;
+}
+
+.upload-btn:hover {
+    background-color: #001eab;
+}
+
+.profile-form {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 15px; /* Jarak antar form group */
+}
+
+.profile-form .form-group {
+    margin-bottom: 0; /* Dikelola oleh gap di .profile-form */
+}
+
+.profile-form label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #555;
+    font-size: 0.95em;
+}
+
+.profile-form input[type="text"],
+.profile-form input[type="email"],
+.profile-form input[type="file"] {
+    width: 100%; /* Pastikan 100% dari parent */
+    padding: 10px 12px;
+    border: 1px solid #ced4da;
+    border-radius: 8px;
+    font-size: 1em;
+    box-sizing: border-box;
+}
+
+.profile-form input[type="file"] {
+    padding: 8px 12px; /* Sedikit lebih kecil untuk file input */
+}
+
+.verified {
+    color: #28a745; /* Warna hijau untuk verified */
+    font-size: 0.85em;
+    margin-top: 5px;
+    font-weight: 500;
+}
+
+.radio-group {
+    display: flex;
+    gap: 30px; /* Jarak antar pilihan radio */
+    margin-top: 5px; /* Sesuaikan margin top */
+    align-items: center;
+}
+
+.radio-option {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.radio-option input[type="radio"] {
+    width: auto; /* Tidak 100% */
+    margin-top: 0;
+    transform: scale(1.1); /* Sedikit membesarkan radio button */
+}
+
+.form-actions {
+    margin-top: 30px;
+    text-align: right;
+}
+
+.save-btn {
+    background-color: #28a745; /* Hijau untuk save */
+    color: white;
+    padding: 12px 25px; /* Padding lebih besar */
+    border: none;
+    border-radius: 25px; /* Pill shape */
+    cursor: pointer;
+    font-size: 1.05em;
+    font-weight: 600;
+    transition: background-color 0.3s ease;
+}
+
+.save-btn:hover {
+    background-color: #218838;
+}
+
+/* Image preview in AdminProfile */
+.profile-image-preview {
+    width: 100px; /* Tetapkan ukuran yang konsisten */
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-top: 15px;
+    border: 2px solid #ddd;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+/* Tambahan untuk konsistensi */
+.error-message {
+    color: #dc3545;
+    background-color: #f8d7da;
+    border: 1px solid #f5c6cb;
+    padding: 10px;
+    border-radius: 8px;
+    margin-top: 15px;
+    text-align: center;
+    font-weight: bold;
 }

@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import '../Users/Profile.css';
+import '../Users/Profile.css'; // Adjust path if necessary
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import defaultProfile from '../assets/profile.png';
+import defaultProfile from '../assets/profile.png'; // Make sure this path is correct
 
 const AdminProfile = () => {
   const navigate = useNavigate();
@@ -13,20 +13,32 @@ const AdminProfile = () => {
     alamat: '',
     ttl: '',
     jenisKelamin: '',
-    foto: null,
+    foto: null, // This will hold the File object for upload
   });
 
   const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    const fetchProfile = async () => {
+    const fetchAdminProfile = async () => {
       try {
-        const token = localStorage.getItem('token');
-        const res = await axios.get('http://localhost:5000/api/users/profile', {
-          headers: { Authorization: `Bearer ${token}` },
+        // *** IMPORTANT CHANGE 1: Use the correct admin token key ***
+        const adminToken = localStorage.getItem('adminToken'); // Ensure this matches your admin login token storage
+
+        if (!adminToken) {
+          console.warn('No admin token found, redirecting to admin login.');
+          navigate('/admin/login');
+          return;
+        }
+
+        // *** IMPORTANT CHANGE 2: Use the new admin-specific GET endpoint ***
+        const res = await axios.get('http://localhost:5000/api/admin/profile', {
+          headers: { Authorization: `Bearer ${adminToken}` },
         });
 
-        const data = res.data.user;
+        // *** IMPORTANT CHANGE 3: Expect data under 'admin' key from the backend ***
+        const data = res.data.admin;
         setUser(data);
         setFormData({
           namaLengkap: data.fullName || '',
@@ -35,15 +47,24 @@ const AdminProfile = () => {
           alamat: data.alamat || '',
           ttl: data.ttl || '',
           jenisKelamin: data.jenisKelamin || '',
-          foto: null,
+          foto: null, // Reset foto to null for display, as the actual file is not kept in state
         });
+        setLoading(false);
       } catch (err) {
-        console.error('Gagal ambil data profil', err);
+        console.error('Gagal mengambil data profil admin:', err);
+        setError('Gagal memuat profil admin. Silakan coba lagi.');
+        setLoading(false);
+        // Redirect to login if unauthorized or forbidden
+        if (err.response && (err.response.status === 401 || err.response.status === 403)) {
+          console.error('Authentication error, clearing admin token.');
+          localStorage.removeItem('adminToken');
+          navigate('/admin/login');
+        }
       }
     };
 
-    fetchProfile();
-  }, []);
+    fetchAdminProfile();
+  }, [navigate]); // Add navigate to dependency array
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -58,34 +79,72 @@ const AdminProfile = () => {
     e.preventDefault();
     const konfirmasi = window.confirm('Apakah Anda yakin ingin menyimpan perubahan profil?');
 
-    if (!konfirmasi) return; // Jika user klik "Cancel", hentikan proses
+    if (!konfirmasi) {
+      console.log('Perubahan profil dibatalkan.');
+      return;
+    }
 
-    const token = localStorage.getItem('token');
+    // *** IMPORTANT CHANGE 4: Use the correct admin token key for updates ***
+    const adminToken = localStorage.getItem('adminToken');
+    if (!adminToken) {
+      alert('Anda tidak terautentikasi sebagai admin. Silakan login kembali.');
+      navigate('/admin/login');
+      return;
+    }
+
     const data = new FormData();
-
+    // Append all text fields from formData
     Object.entries(formData).forEach(([key, val]) => {
-      if (val !== null) {
+      // Only append if the value is not null, otherwise FormData might send "null" string
+      if (val !== null && key !== 'foto') { // Exclude 'foto' if it's null (no new file selected)
         data.append(key, val);
       }
     });
 
+    // Append the file if it exists
+    if (formData.foto) {
+      data.append('foto', formData.foto);
+    } else {
+        // If foto is null, explicitly send a signal to backend if needed to clear photo
+        // Or backend can just ignore missing foto
+        // Example: data.append('foto', 'null');
+    }
+
     try {
-      await axios.put('http://localhost:5000/api/users/profile', data, {
-        headers: { Authorization: `Bearer ${token}` },
+      // *** IMPORTANT CHANGE 5: Call the new admin-specific PUT endpoint ***
+      await axios.put('http://localhost:5000/api/admin/profile', data, {
+        headers: {
+          Authorization: `Bearer ${adminToken}`,
+          // Axios automatically sets Content-Type to 'multipart/form-data' for FormData objects
+        },
       });
 
-      alert('Profil berhasil disimpan!');
-      window.location.reload();
+      alert('Profil admin berhasil disimpan!');
+      window.location.reload(); // Reload the page to show updated data and clear file input
     } catch (err) {
-      console.error(err);
-      alert('Gagal menyimpan profil.');
+      console.error('Gagal menyimpan profil admin:', err.response ? err.response.data : err.message);
+      alert('Gagal menyimpan profil admin. Silakan coba lagi.');
+      if (err.response && (err.response.status === 401 || err.response.status === 403)) {
+        localStorage.removeItem('adminToken');
+        navigate('/admin/login');
+      }
     }
   };
 
   const handleLogout = () => {
-    localStorage.removeItem('admin'); // Logout
+    // *** IMPORTANT CHANGE 6: Remove the admin-specific token on logout ***
+    localStorage.removeItem('adminToken');
     navigate('/admin/login');
   };
+
+  // Display loading and error messages
+  if (loading) {
+    return <div className="user-container">Memuat profil admin...</div>;
+  }
+
+  if (error) {
+    return <div className="user-container" style={{ color: 'red', padding: '20px', textAlign: 'center' }}>{error}</div>;
+  }
 
   return (
     <div className="user-container">
@@ -105,7 +164,7 @@ const AdminProfile = () => {
       <main className="user-main">
         <div className="navbar-card">
           <div className="user-navbar">
-            <span>Selamat Datang, {formData.namaLengkap || 'nama'}</span>
+            <span>Selamat Datang, {formData.namaLengkap || 'Admin'}</span>
             <button className="logout-btn" onClick={handleLogout}>
               Logout
             </button>
@@ -113,18 +172,19 @@ const AdminProfile = () => {
         </div>
 
         <div className="user-card">
-          <h3>Detail Profile</h3>
+          <h3>Detail Profile Admin</h3>
 
           <div className="profile-content">
             <div className="profile-photo">
-              <img src={
-                formData.foto
-                  ? URL.createObjectURL(formData.foto)
-                  : user?.foto
-                    ? `http://localhost:5000${user.foto}`
-                    : defaultProfile // ✅ Gambar lokal fallback
-              }
-                alt="Profile"
+              <img
+                src={
+                  formData.foto
+                    ? URL.createObjectURL(formData.foto) // Preview selected new image
+                    : user?.foto
+                      ? `http://localhost:5000${user.foto}` // Display existing image from backend
+                      : defaultProfile // Fallback to local default image
+                }
+                alt="Profile Admin"
               />
               <input type="file" accept="image/*" onChange={handleFileChange} />
             </div>

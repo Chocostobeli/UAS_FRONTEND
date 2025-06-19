@@ -1,17 +1,20 @@
 const express = require('express');
 const router = express.Router();
-const authenticateToken = require('../middleware/authMiddleware');
-const upload = require('../middleware/upload');
+const authenticateToken = require('../middleware/authmiddleware'); // Middleware for general users
+const upload = require('../middleware/upload'); // Assuming this multer/fileupload setup is shared
 const profileController = require('../controllers/profileController');
 
-router.get('/profile', authenticateToken, profileController.getProfile); // Ambil data awal
-router.put('/profile', authenticateToken, upload.single('foto'), profileController.updateProfile); // Update data
-router.put('/profile', authenticateToken, upload.single('foto'), profileController.updateProfileAdmin); // Update data
-
+// --- User Profile Routes ---
+// This route will be accessible at /api/users/profile (GET)
 router.get('/profile', authenticateToken, (req, res) => {
-  console.log('✅ Route /api/users/profile ter-trigger');
-  profileController.getProfile(req, res);
+  console.log('✅ Route /api/users/profile (GET) ter-trigger');
+  profileController.getProfile(req, res); // Calls the user-specific getProfile method
 });
 
+// This route will be accessible at /api/users/profile (PUT)
+router.put('/profile', authenticateToken, upload.single('foto'), (req, res) => {
+  console.log('✅ Route /api/users/profile (PUT) ter-trigger');
+  profileController.updateProfile(req, res); // Calls the user-specific updateProfile method
+});
 
 module.exports = router;

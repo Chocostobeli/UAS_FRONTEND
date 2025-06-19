@@ -1,8 +1,8 @@
-// server.js
 const express = require('express');
 const cors = require('cors');
-const fileUpload = require('express-fileupload'); // Import express-fileupload
-const sequelizePengajuan = require('./config/databasePengajuan'); // Menggunakan nama variabel yang sama seperti db.js
+const fileUpload = require('express-fileupload');
+const sequelizePengajuan = require('./config/databasePengajuan');
+const sequelizeUser = require('./config/databaseUser'); // Import database user
 require('dotenv').config();
 
 const app = express();
@@ -15,13 +15,19 @@ app.use(fileUpload({
   limits: { fileSize: 50 * 1024 * 1024 }, // Batasan ukuran file 50MB
 }));
 
-// Sinkronkan database
+// Sinkronkan database Pengajuan
 sequelizePengajuan.sync({ alter: true }) // auto update tabel sesuai model
   .then(() => {
-    console.log('Database disesuaikan!');
-    // Hapus listen di sini, karena ada di bagian bawah
+    console.log('Database Pengajuan disesuaikan!');
   })
-  .catch(err => console.error('Gagal sync:', err));
+  .catch(err => console.error('Gagal sync database Pengajuan:', err));
+
+// Sinkronkan database User
+sequelizeUser.sync({ alter: true }) // auto update tabel sesuai model
+  .then(() => {
+    console.log('Database User disesuaikan!');
+  })
+  .catch(err => console.error('Gagal sync database User:', err));
 
 app.get('/', (req, res) => {
   res.send('API is running...');
@@ -29,18 +35,25 @@ app.get('/', (req, res) => {
 
 // ROUTES
 const authRoutes = require('./routes/authRoutes');
-app.use('/api', authRoutes); // endpoint: /api/auth/register dan /api/auth/login
+app.use('/api', authRoutes); // endpoint: /api/register dan /api/login
 
-// Rute lainnya...
 const pengajuanRoutes = require('./routes/pengajuanRoutes');
 app.use('/api/pengajuan', pengajuanRoutes);
 
 const pengajuanWNARoutes = require('./routes/pengajuanWNA');
 app.use('/api/pengajuan-wna', pengajuanWNARoutes);
 
-// endpoint: PUT /api/profile
 const profileRoutes = require('./routes/profileRoutes');
 app.use('/api/users', profileRoutes);
+
+// Rute baru untuk Dashboard Pengajuan
+const dashboardRoutes = require('./routes/dashboardRoutes');
+app.use('/api/dashboard', dashboardRoutes); // Endpoint: /api/dashboard/submissions
+
+// --- TAMBAHKAN BARIS INI ---
+const adminRoutes = require('./routes/adminRoutes'); // <-- Import adminRoutes
+app.use('/api/admin', adminRoutes); // <-- Gunakan adminRoutes dengan prefix /api/admin
+// ----------------------------
 
 // Menampilkan file statis dari folder uploads
 app.use('/uploads', express.static('uploads'));

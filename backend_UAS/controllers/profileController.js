@@ -1,69 +1,86 @@
-const User = require('../models/User');
-const path = require('path');
+// Assume you have a User model (e.g., Mongoose)
+const User = require('../models/User'); // Or Admin model if separate
 
 exports.getProfile = async (req, res) => {
   try {
-    const userId = req.user.id;
-    const user = await User.findByPk(userId);
-
-    if (!user) return res.status(404).json({ message: 'User tidak ditemukan' });
-
+    const user = await User.findById(req.user.id).select('-password');
+    if (!user) {
+      return res.status(404).json({ message: 'Profil pengguna tidak ditemukan' });
+    }
     res.json({ user });
-  } catch (error) {
-    res.status(500).json({ message: 'Gagal ambil data profil', error: error.message });
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
   }
 };
 
 exports.updateProfile = async (req, res) => {
+  // Logic for updating regular user profile
   try {
-    const userId = req.user.id;
-    const { namaLengkap, email, whatsapp, alamat, ttl, jenisKelamin } = req.body;
+    let user = await User.findById(req.user.id);
+    if (!user) {
+      return res.status(404).json({ message: 'Pengguna tidak ditemukan' });
+    }
 
-    const user = await User.findByPk(userId);
-    if (!user) return res.status(404).json({ message: 'User tidak ditemukan' });
-
-    user.fullName = namaLengkap;
-    user.email = email;
-    user.whatsapp = whatsapp;
-    user.alamat = alamat;
-    user.ttl = ttl;
-    user.jenisKelamin = jenisKelamin;
+    // Update fields
+    user.fullName = req.body.namaLengkap || user.fullName;
+    user.email = req.body.email || user.email;
+    user.whatsapp = req.body.whatsapp || user.whatsapp;
+    user.alamat = req.body.alamat || user.alamat;
+    user.ttl = req.body.ttl || user.ttl;
+    user.jenisKelamin = req.body.jenisKelamin || user.jenisKelamin;
 
     if (req.file) {
-      user.foto = `/uploads/profileUser/${req.file.filename}`;
+      // Handle file upload: save req.file.filename or path to user.foto
+      user.foto = `/uploads/${req.file.filename}`; // Adjust path as per your multer config
     }
 
     await user.save();
-
-    res.json({ message: 'Profil berhasil diperbarui', user });
-  } catch (error) {
-    res.status(500).json({ message: 'Gagal memperbarui profil', error: error.message });
+    res.json({ message: 'Profil pengguna berhasil diperbarui', user });
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
   }
 };
 
-exports.updateProfileAdmin = async (req, res) => {
+exports.getAdminProfile = async (req, res) => {
+  // Logic for fetching admin profile
   try {
-    const adminId = req.user.id;
-    const { namaLengkap, email, whatsapp, alamat, ttl, jenisKelamin } = req.body;
+    const adminUser = await User.findById(req.user.id).select('-password'); // Assuming admins are also in User model with a 'role'
+    if (!adminUser || adminUser.role !== 'admin') { // Double-check role for safety
+      return res.status(404).json({ message: 'Profil admin tidak ditemukan atau bukan admin' });
+    }
+    res.json({ admin: adminUser }); // Respond with 'admin' key as expected by frontend
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
+};
 
-    const admin = await User.findByPk(adminId);
-    if (!admin) return res.status(404).json({ message: 'Admin tidak ditemukan' });
-
-    admin.fullName = namaLengkap;
-    admin.email = email;
-    admin.whatsapp = whatsapp;
-    admin.alamat = alamat;
-    admin.ttl = ttl;
-    admin.jenisKelamin = jenisKelamin;
-
-    if (req.file) {
-      admin.foto = `/uploads/profileUser/${req.file.filename}`;
+exports.updateAdminProfile = async (req, res) => {
+  // Logic for updating admin profile (similar to updateProfile but for admin)
+  try {
+    let adminUser = await User.findById(req.user.id);
+    if (!adminUser || adminUser.role !== 'admin') {
+      return res.status(404).json({ message: 'Admin tidak ditemukan atau bukan admin' });
     }
 
-    await admin.save();
+    // Update fields for admin
+    adminUser.fullName = req.body.namaLengkap || adminUser.fullName;
+    adminUser.email = req.body.email || adminUser.email;
+    adminUser.whatsapp = req.body.whatsapp || adminUser.whatsapp;
+    adminUser.alamat = req.body.alamat || adminUser.alamat;
+    adminUser.ttl = req.body.ttl || adminUser.ttl;
+    adminUser.jenisKelamin = req.body.jenisKelamin || adminUser.jenisKelamin;
 
-    res.json({ message: 'Profil Admin berhasil diperbarui', admin });
-  } catch (error) {
-    res.status(500).json({ message: 'Gagal memperbarui profil Admin', error: error.message });
+    if (req.file) {
+      adminUser.foto = `/uploads/${req.file.filename}`;
+    }
+
+    await adminUser.save();
+    res.json({ message: 'Profil admin berhasil diperbarui', admin: adminUser }); // Respond with 'admin' key
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
   }
 };

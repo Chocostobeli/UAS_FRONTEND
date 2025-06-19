@@ -1,17 +1,13 @@
-import React, { useState } from 'react';
-// Memperbaiki path import CSS agar sesuai dengan konfigurasi resolusi modul
+import React, { useState, useEffect } from 'react';
 import '../styles/Form.css';
 
-const PengajuanFormWNA2 = ({ onBack, onNext }) => {
-  // State untuk menyimpan data pewaris WNI Tionghoa & Asing
-  const [formData, setFormData] = useState({
-    namaPewaris: '',
-    nomorKTPPewaris: '', // Opsional, jika masih ada
-    tanggalWafatPewaris: '',
-    alamatTerakhirPewaris: '',
-  });
+const PengajuanFormStep2 = ({ onBack, onNext, initialData }) => {
+  const [formData, setFormData] = useState(initialData);
 
-  // Handler untuk memperbarui state saat input berubah
+  useEffect(() => {
+    setFormData(initialData);
+  }, [initialData]);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({
@@ -20,18 +16,13 @@ const PengajuanFormWNA2 = ({ onBack, onNext }) => {
     });
   };
 
-  // Handler saat form disubmit
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Log data yang disubmit (bisa diganti dengan pengiriman data ke backend)
-    console.log('Data Pewaris WNI Tionghoa & Asing submitted:', formData);
-    // Lanjut ke langkah berikutnya
-    if (onNext) onNext(formData);
+    onNext(formData);
   };
 
   return (
     <div>
-      {/* Tombol Kembali di luar card */}
       <div className="back-button-wrapper">
         <button className="back-button" onClick={onBack}>← Kembali</button>
       </div>
@@ -41,57 +32,52 @@ const PengajuanFormWNA2 = ({ onBack, onNext }) => {
         <div className="form-container">
           <h3 className="form-subtitle">Data Pewaris</h3>
           <form onSubmit={handleSubmit}>
-            {/* Input Nama Lengkap Pewaris */}
             <div className="form-field">
-              <label htmlFor="namaPewarisWNA2">Nama Lengkap Pewaris</label>
+              <label htmlFor="nama_pewaris">Nama Lengkap Pewaris</label>
               <input
                 type="text"
-                id="namaPewarisWNA2"
-                name="namaPewaris"
-                value={formData.namaPewaris}
+                id="nama_pewaris_wna"
+                name="nama_pewaris_wna" // Sesuaikan nama dengan field di backend
+                value={formData.nama_pewaris_wna}
                 onChange={handleChange}
                 required
               />
             </div>
 
-            {/* Input Nomor KTP Pewaris (Opsional) */}
             <div className="form-field">
-              <label htmlFor="nomorKTPPewarisWNA2">Nomor KTP Pewaris (opsional jika masih ada)</label>
+              <label htmlFor="ktp_pewaris">Nomor KTP Pewaris (opsional jika tidak ada)</label>
               <input
-                type="text" // Menggunakan text karena input nomor bisa mengandung format lain
-                id="nomorKTPPewarisWNA2"
-                name="nomorKTPPewaris"
-                value={formData.nomorKTPPewaris}
+                type="text"
+                id="ktp_pewaris_wna"
+                name="ktp_pewaris_wna" // Sesuaikan nama dengan field di backend
+                value={formData.ktp_pewaris_wna}
                 onChange={handleChange}
               />
             </div>
 
-            {/* Input Tanggal Wafat Pewaris */}
             <div className="form-field">
-              <label htmlFor="tanggalWafatPewarisWNA2">Tanggal Wafat Pewaris</label>
+              <label htmlFor="tanggal_wafat_pewaris">Tanggal Wafat Pewaris</label>
               <input
                 type="date"
-                id="tanggalWafatPewarisWNA2"
-                name="tanggalWafatPewaris"
-                value={formData.tanggalWafatPewaris}
+                id="tanggal_wafat_pewaris_wna"
+                name="tanggal_wafat_pewaris_wna" // Sesuaikan nama dengan field di backend
+                value={formData.tanggal_wafat_pewaris_wna}
                 onChange={handleChange}
                 required
               />
             </div>
 
-            {/* Input Alamat Terakhir Pewaris */}
             <div className="form-field">
-              <label htmlFor="alamatTerakhirPewarisWNA2">Alamat Terakhir Pewaris</label>
+              <label htmlFor="alamat_terakhir_pewaris">Alamat Terakhir Pewaris</label>
               <textarea
-                id="alamatTerakhirPewarisWNA2"
-                name="alamatTerakhirPewaris"
-                value={formData.alamatTerakhirPewaris}
+                id="alamat_terakhir_pewaris_wna"
+                name="alamat_terakhir_pewaris_wna" // Sesuaikan nama dengan field di backend
+                value={formData.alamat_terakhir_pewaris_wna}
                 onChange={handleChange}
                 required
               />
             </div>
 
-            {/* Tombol navigasi */}
             <div className="form-buttons">
               <button type="button" className="back-button" onClick={onBack}>Kembali</button>
               <button type="submit" className="form-button">Selanjutnya</button>
@@ -103,4 +89,4 @@ const PengajuanFormWNA2 = ({ onBack, onNext }) => {
   );
 };
 
-export default PengajuanFormWNA2;
+export default PengajuanFormStep2;

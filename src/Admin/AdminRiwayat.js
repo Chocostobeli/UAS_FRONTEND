@@ -1,67 +1,68 @@
 // src/Admin/AdminRiwayat.js
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react'; // Tambahkan useCallback
 import { Link, useNavigate } from 'react-router-dom';
-import '../Users/Profile.css'; 
+import '../Users/Profile.css';
+import axios from 'axios'; // Import axios
 
 const AdminRiwayat = () => {
   const navigate = useNavigate();
 
-  // Data dummy pengajuan
-  const allPengajuan = [
-    {
-      id: 1,
-      nama: 'Muhammad Saleh',
-      kegiatan: 'Mengajukan wm Muhhamad Salah',
-      kategori: 'WNI',
-      tanggal: '2025-06-15',
-      waktu: '10:00',
-      status: 'Proses',
-    },
-    {
-      id: 2,
-      nama: 'Putri Aulia',
-      kegiatan: 'Pengajuan surat',
-      kategori: 'WNI Tionghoa & Asing',
-      tanggal: '2025-06-15',
-      waktu: '11:30',
-      status: 'Pending',
-    },
-    {
-      id: 3,
-      nama: 'Rafi Ahmad',
-      kegiatan: 'Pengajuan surat',
-      kategori: 'WNI',
-      tanggal: '2025-06-14',
-      waktu: '09:00',
-      status: 'Disetujui',
-    },
-    {
-      id: 4,
-      nama: 'Dinda Maya',
-      kegiatan: 'Pengajuan surat',
-      kategori: 'WNI Tionghoa & Asing',
-      tanggal: '2025-06-13',
-      waktu: '14:00',
-      status: 'Ditolak',
-    },
-    {
-      id: 5,
-      nama: 'Budi Santoso',
-      kegiatan: 'Pengajuan surat',
-      kategori: 'WNI',
-      tanggal: '2025-06-15',
-      waktu: '16:00',
-      status: 'Proses',
-    },
-  ];
-
-  const [filteredPengajuan, setFilteredPengajuan] = useState(allPengajuan);
+  // Ubah ini menjadi state kosong yang akan diisi dari API
+  const [allPengajuan, setAllPengajuan] = useState([]);
+  const [filteredPengajuan, setFilteredPengajuan] = useState([]);
   const [selectedDate, setSelectedDate] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('');
+  const [loading, setLoading] = useState(true); // State untuk indikator loading
+  const [error, setError] = useState(null); // State untuk error
+
+  // Fungsi untuk mengambil data dari backend
+  const fetchRiwayatData = useCallback(async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      const token = localStorage.getItem('token'); // Asumsi token disimpan di localStorage
+      if (!token) {
+        // Jika tidak ada token, mungkin redirect ke halaman login admin
+        navigate('/admin/login');
+        return;
+      }
+
+      // Endpoint yang sesuai dengan yang Anda definisikan di routes/adminRoutes.js
+      const res = await axios.get('http://localhost:5000/api/admin/riwayat', {
+        headers: {
+          Authorization: `Bearer ${token}`, // Kirim token untuk otentikasi
+        },
+      });
+      console.log("Data riwayat dari API:", res.data); // Untuk debugging
+
+      setAllPengajuan(res.data); // Simpan data mentah dari API
+      setFilteredPengajuan(res.data); // Awalnya, tampilkan semua data
+
+    } catch (err) {
+      console.error('Gagal mengambil data riwayat:', err);
+      setError('Gagal mengambil data riwayat. Silakan coba lagi.');
+      // Handle error, misalnya token kadaluarsa
+      if (err.response && err.response.status === 401) {
+        localStorage.removeItem('token');
+        navigate('/admin/login');
+        alert('Sesi Anda telah berakhir. Mohon login kembali.');
+      } else {
+        alert('Terjadi kesalahan saat mengambil riwayat aktivitas.');
+      }
+    } finally {
+      setLoading(false);
+    }
+  }, [navigate]); // navigate ditambahkan ke dependency array
+
+  // Efek untuk memanggil API saat komponen pertama kali dimuat
+  useEffect(() => {
+    fetchRiwayatData();
+  }, [fetchRiwayatData]); // Panggil fetchRiwayatData saat komponen dimuat
 
   // Efek untuk memfilter data setiap kali tanggal atau kategori berubah
+  // Dan sekarang juga bergantung pada allPengajuan yang diambil dari API
   useEffect(() => {
-    let tempPengajuan = allPengajuan;
+    let tempPengajuan = allPengajuan; // Gunakan data dari state, bukan const hardcoded
 
     // Filter berdasarkan tanggal
     if (selectedDate) {
@@ -73,12 +74,12 @@ const AdminRiwayat = () => {
       if (selectedCategory === 'WNI') {
         tempPengajuan = tempPengajuan.filter(item => item.kategori === 'WNI');
       } else if (selectedCategory === 'WNI Tionghoa & Asing') {
-        tempPengajuan = tempPengajuan.filter(item => item.kategori === 'WNI Tionghoa & Asing');
+        tempPengajuan = tempPengajuan.filter(item => item.kategori === 'WNA'); // Perhatikan di backend Anda kategorinya 'WNA'
       }
     }
 
     setFilteredPengajuan(tempPengajuan);
-  }, [selectedDate, selectedCategory]);
+  }, [selectedDate, selectedCategory, allPengajuan]); // allPengajuan ditambahkan ke dependency array
 
   const getStatusClass = (status) => {
     if (status === 'Pending') return 'status pending';
@@ -89,15 +90,16 @@ const AdminRiwayat = () => {
   };
 
   const handleLogout = () => {
-    localStorage.removeItem('admin');
-    navigate('/');
+    localStorage.removeItem('token'); // Pastikan menghapus 'token' yang benar
+    navigate('/admin/login'); // Arahkan ke halaman login admin
   };
 
-  const today = new Date();
-  const yyyy = today.getFullYear();
-  const mm = String(today.getMonth() + 1).padStart(2, '0'); // Months start at 0!
-  const dd = String(today.getDate()).padStart(2, '0');
-  const todayFormatted = `${yyyy}-${mm}-${dd}`;
+  // Hapus baris ini karena todayFormatted tidak digunakan
+  // const today = new Date();
+  // const yyyy = today.getFullYear();
+  // const mm = String(today.getMonth() + 1).padStart(2, '0');
+  // const dd = String(today.getDate()).padStart(2, '0');
+  // const todayFormatted = `${yyyy}-${mm}-${dd}`;
 
   return (
     <div className="user-container">
@@ -157,36 +159,42 @@ const AdminRiwayat = () => {
           </div>
 
           <div className="table-container">
-            <table className="data-table">
-              <thead>
-                <tr>
-                  <th>Nama User</th>
-                  <th>Kegiatan</th>
-                  <th>Kategori</th>
-                  <th>Tanggal</th>
-                  <th>Status</th>
-                </tr>
-              </thead>
-              <tbody>
-                {filteredPengajuan.length > 0 ? (
-                  filteredPengajuan.map((item) => (
-                    <tr key={item.id}>
-                      <td>{item.nama}</td>
-                      <td>{item.kegiatan}</td>
-                      <td>{item.kategori}</td>
-                      <td>{`${item.tanggal} | ${item.waktu}`}</td>
-                      <td>
-                        <span className={getStatusClass(item.status)}>{item.status}</span>
-                      </td>
-                    </tr>
-                  ))
-                ) : (
+            {loading ? (
+              <p style={{ textAlign: 'center' }}>Memuat data riwayat...</p>
+            ) : error ? (
+              <p style={{ textAlign: 'center', color: 'red' }}>{error}</p>
+            ) : (
+              <table className="data-table">
+                <thead>
                   <tr>
-                    <td colSpan="5" style={{ textAlign: 'center' }}>Tidak ada riwayat untuk filter ini.</td>
+                    <th>Nama User</th>
+                    <th>Kegiatan</th>
+                    <th>Kategori</th>
+                    <th>Tanggal</th>
+                    <th>Status</th>
                   </tr>
-                )}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {filteredPengajuan.length > 0 ? (
+                    filteredPengajuan.map((item) => (
+                      <tr key={item.id}> {/* Pastikan item.id itu unik */}
+                        <td>{item.nama}</td>
+                        <td>{item.kegiatan}</td>
+                        <td>{item.kategori}</td>
+                        <td>{`${item.tanggal} | ${item.waktu}`}</td>
+                        <td>
+                          <span className={getStatusClass(item.status)}>{item.status}</span>
+                        </td>
+                      </tr>
+                    ))
+                  ) : (
+                    <tr>
+                      <td colSpan="5" style={{ textAlign: 'center' }}>Tidak ada riwayat untuk filter ini.</td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            )}
           </div>
         </div>
       </main>
