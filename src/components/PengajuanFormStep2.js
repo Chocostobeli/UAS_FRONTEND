@@ -1,17 +1,13 @@
-import React, { useState } from 'react';
-
+import React, { useState, useEffect } from 'react';
 import '../styles/Form.css';
 
-const PengajuanFormStep2 = ({ onBack, onNext }) => {
-  // State untuk menyimpan data pewaris
-  const [formData, setFormData] = useState({
-    namaPewaris: '',
-    ktpPewaris: '', // Opsional, jika masih ada
-    tanggalWafat: '',
-    alamatTerakhirPewaris: '',
-  });
+const PengajuanFormStep2 = ({ onBack, onNext, initialData }) => {
+  const [formData, setFormData] = useState(initialData);
 
-  // Handler untuk memperbarui state saat input berubah
+  useEffect(() => {
+    setFormData(initialData);
+  }, [initialData]);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({
@@ -20,18 +16,13 @@ const PengajuanFormStep2 = ({ onBack, onNext }) => {
     });
   };
 
-  // Handler saat form disubmit
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Log data pewaris yang disubmit (bisa diganti dengan pengiriman data ke backend)
-    console.log('Data Pewaris submitted:', formData);
-    // Lanjut ke langkah berikutnya
-    if (onNext) onNext(formData);
+    onNext(formData);
   };
 
   return (
     <div>
-      {/* Tombol Kembali di luar card */}
       <div className="back-button-wrapper">
         <button className="back-button" onClick={onBack}>← Kembali</button>
       </div>
@@ -41,57 +32,52 @@ const PengajuanFormStep2 = ({ onBack, onNext }) => {
         <div className="form-container">
           <h3 className="form-subtitle">Data Pewaris</h3>
           <form onSubmit={handleSubmit}>
-            {/* Input Nama Lengkap Pewaris */}
             <div className="form-field">
-              <label htmlFor="namaPewaris">Nama Lengkap Pewaris</label>
+              <label htmlFor="nama_pewaris">Nama Lengkap Pewaris</label>
               <input
                 type="text"
-                id="namaPewaris"
-                name="namaPewaris"
-                value={formData.namaPewaris}
+                id="nama_pewaris"
+                name="nama_pewaris" // Sesuaikan nama dengan field di backend
+                value={formData.nama_pewaris}
                 onChange={handleChange}
                 required
               />
             </div>
 
-            {/* Input Nomor KTP Pewaris (Opsional) */}
             <div className="form-field">
-              <label htmlFor="ktpPewaris">Nomor KTP Pewaris (opsional jika tidak ada)</label>
+              <label htmlFor="ktp_pewaris">Nomor KTP Pewaris (opsional jika tidak ada)</label>
               <input
                 type="text"
-                id="ktpPewaris"
-                name="ktpPewaris"
-                value={formData.ktpPewaris}
+                id="ktp_pewaris"
+                name="ktp_pewaris" // Sesuaikan nama dengan field di backend
+                value={formData.ktp_pewaris}
                 onChange={handleChange}
               />
             </div>
 
-            {/* Input Tanggal Wafat Pewaris */}
             <div className="form-field">
-              <label htmlFor="tanggalWafat">Tanggal Wafat Pewaris</label>
+              <label htmlFor="tanggal_wafat_pewaris">Tanggal Wafat Pewaris</label>
               <input
                 type="date"
-                id="tanggalWafat"
-                name="tanggalWafat"
-                value={formData.tanggalWafat}
+                id="tanggal_wafat_pewaris"
+                name="tanggal_wafat_pewaris" // Sesuaikan nama dengan field di backend
+                value={formData.tanggal_wafat_pewaris}
                 onChange={handleChange}
                 required
               />
             </div>
 
-            {/* Input Alamat Terakhir Pewaris */}
             <div className="form-field">
-              <label htmlFor="alamatTerakhirPewaris">Alamat Terakhir Pewaris</label>
+              <label htmlFor="alamat_terakhir_pewaris">Alamat Terakhir Pewaris</label>
               <textarea
-                id="alamatTerakhirPewaris"
-                name="alamatTerakhirPewaris"
-                value={formData.alamatTerakhirPewaris}
+                id="alamat_terakhir_pewaris"
+                name="alamat_terakhir_pewaris" // Sesuaikan nama dengan field di backend
+                value={formData.alamat_terakhir_pewaris}
                 onChange={handleChange}
                 required
               />
             </div>
 
-            {/* Tombol navigasi */}
             <div className="form-buttons">
               <button type="button" className="back-button" onClick={onBack}>Kembali</button>
               <button type="submit" className="form-button">Selanjutnya</button>

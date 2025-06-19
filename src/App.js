@@ -10,9 +10,11 @@ import LoginAdmin from './Admin/LoginAdmin';
 import RegisterAdmin from './Admin/RegisterAdmin';
 import AdminProfile from './Admin/AdminProfile';
 import AdminPengajuan from './Admin/AdminPengajuan';
-import AdminRiwayat from './Admin/AdminRiwayat'; 
+import AdminRiwayat from './Admin/AdminRiwayat';
 import AuthLayout from './layouts/AuthLayout';
 import MainLayout from './layouts/MainLayout';
+import PengajuanPage from './pages/PengajuanPage';
+
 
 function App() {
   return (
@@ -72,7 +74,9 @@ function App() {
         {/* Dashboard Admin */}
         <Route path="/admin/profile" element={<AdminProfile />} />
         <Route path="/admin/pengajuan" element={<AdminPengajuan />} />
-        <Route path="/admin/riwayat" element={<AdminRiwayat />} /> 
+        <Route path="/admin/riwayat" element={<AdminRiwayat />} />
+        <Route path="/pengajuan" element={<PengajuanPage />} />
+
       </Routes>
     </Router>
   );

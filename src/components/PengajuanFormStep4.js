@@ -1,51 +1,51 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import '../styles/Form.css';
 
-const PengajuanFormStep4 = ({ onBack, onNext }) => {
-  const [formData, setFormData] = useState({
-    suratKematian: '',
-    ktpAhliWaris: '',
-    kartuKeluarga: '',
-    suratNikah: '',
-    aktaKelahiran: '',
-    suratKuasa: '',
-    sertifikatTanah: '',
-    bukuTabungan: '',
-    pernyataanBenar: false,
-  });
+const PengajuanFormStep4 = ({ onBack, onNext, initialData }) => {
+  const [formData, setFormData] = useState(initialData);
+
+  useEffect(() => {
+    setFormData(initialData);
+  }, [initialData]);
 
   const handleFileChange = (e) => {
     const { name, files } = e.target;
     setFormData({
       ...formData,
-      [name]: files[0],
+      [name]: files[0], // Simpan objek File
     });
   };
 
   const handleCheckboxChange = (e) => {
     setFormData({
       ...formData,
-      pernyataanBenar: e.target.checked,
+      pernyataan_benar: e.target.checked, // Sesuaikan nama dengan field di backend
     });
   };
 
   const handleReset = () => {
     setFormData({
-      suratKematian: '',
-      ktpAhliWaris: '',
-      kartuKeluarga: '',
-      suratNikah: '',
-      aktaKelahiran: '',
-      suratKuasa: '',
-      sertifikatTanah: '',
-      bukuTabungan: '',
-      pernyataanBenar: false,
+      ...formData, // Pertahankan data dari step sebelumnya
+      surat_kematian: null,
+      ktp_ahli_waris_file: null,
+      kartu_keluarga: null,
+      surat_nikah: null,
+      akta_kelahiran: null,
+      surat_kuasa: null,
+      sertifikat_tanah: null,
+      buku_tabungan: null,
+      pernyataan_benar: false,
     });
+    // Juga reset input file secara visual jika diperlukan (misal: dengan me-reset key input)
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (onNext) onNext();
+    if (!formData.pernyataan_benar) {
+      alert("Anda harus menyetujui pernyataan kebenaran data."); // Menggunakan alert sementara
+      return;
+    }
+    onNext(formData);
   };
 
   return (
@@ -65,33 +65,36 @@ const PengajuanFormStep4 = ({ onBack, onNext }) => {
               <label>Dokumen Surat Kematian</label>
               <input
                 type="file"
-                name="suratKematian"
-                accept="application/pdf"
+                name="surat_kematian" // Sesuaikan nama dengan field di backend
+                accept="application/pdf,image/*"
                 onChange={handleFileChange}
                 required
               />
+              {formData.surat_kematian && <p>File terpilih: {formData.surat_kematian.name}</p>}
             </div>
 
             <div className="form-field">
               <label>KTP (Ahli Waris)</label>
               <input
                 type="file"
-                name="ktpAhliWaris"
-                accept="application/pdf"
+                name="ktp_ahli_waris_file" // Sesuaikan nama dengan field di backend
+                accept="application/pdf,image/*"
                 onChange={handleFileChange}
                 required
               />
+              {formData.ktp_ahli_waris_file && <p>File terpilih: {formData.ktp_ahli_waris_file.name}</p>}
             </div>
 
             <div className="form-field">
               <label>Kartu Keluarga</label>
               <input
                 type="file"
-                name="kartuKeluarga"
-                accept="application/pdf"
+                name="kartu_keluarga" // Sesuaikan nama dengan field di backend
+                accept="application/pdf,image/*"
                 onChange={handleFileChange}
                 required
               />
+              {formData.kartu_keluarga && <p>File terpilih: {formData.kartu_keluarga.name}</p>}
             </div>
 
             {/* Dokumen Opsional */}
@@ -99,61 +102,67 @@ const PengajuanFormStep4 = ({ onBack, onNext }) => {
               <label>Surat Nikah (Opsional)</label>
               <input
                 type="file"
-                name="suratNikah"
-                accept="application/pdf"
+                name="surat_nikah" // Sesuaikan nama dengan field di backend
+                accept="application/pdf,image/*"
                 onChange={handleFileChange}
               />
+              {formData.surat_nikah && <p>File terpilih: {formData.surat_nikah.name}</p>}
             </div>
 
             <div className="form-field">
               <label>Akta Kelahiran (Opsional)</label>
               <input
                 type="file"
-                name="aktaKelahiran"
-                accept="application/pdf"
+                name="akta_kelahiran" // Sesuaikan nama dengan field di backend
+                accept="application/pdf,image/*"
                 onChange={handleFileChange}
               />
+              {formData.akta_kelahiran && <p>File terpilih: {formData.akta_kelahiran.name}</p>}
             </div>
 
             <div className="form-field">
               <label>Surat Kuasa Ahli Waris (Opsional)</label>
               <input
                 type="file"
-                name="suratKuasa"
-                accept="application/pdf"
+                name="surat_kuasa" // Sesuaikan nama dengan field di backend
+                accept="application/pdf,image/*"
                 onChange={handleFileChange}
               />
+              {formData.surat_kuasa && <p>File terpilih: {formData.surat_kuasa.name}</p>}
             </div>
 
             <div className="form-field">
               <label>Sertifikat Tanah/Rumah (Opsional)</label>
               <input
                 type="file"
-                name="sertifikatTanah"
-                accept="application/pdf"
+                name="sertifikat_tanah" // Sesuaikan nama dengan field di backend
+                accept="application/pdf,image/*"
                 onChange={handleFileChange}
               />
+              {formData.sertifikat_tanah && <p>File terpilih: {formData.sertifikat_tanah.name}</p>}
             </div>
 
             <div className="form-field">
               <label>Buku Tabungan/Rekening Bank (Pewaris) (Opsional)</label>
               <input
                 type="file"
-                name="bukuTabungan"
-                accept="application/pdf"
+                name="buku_tabungan" // Sesuaikan nama dengan field di backend
+                accept="application/pdf,image/*"
                 onChange={handleFileChange}
               />
+              {formData.buku_tabungan && <p>File terpilih: {formData.buku_tabungan.name}</p>}
             </div>
 
             {/* Pernyataan */}
             <label className="checkbox-container">
-            <input 
+              <input
                 type="checkbox"
-                checked={formData.pernyataanBenar}
+                name="pernyataan_benar" // Sesuaikan nama dengan field di backend
+                checked={formData.pernyataan_benar}
                 onChange={handleCheckboxChange}
-                required 
-            />
-            Kami menyatakan bahwa data yang diberikan adalah benar dan sah
+                required
+              />
+              Kami menyatakan bahwa data yang diberikan adalah benar dan sah
             </label>
 
             <div className="form-buttons">

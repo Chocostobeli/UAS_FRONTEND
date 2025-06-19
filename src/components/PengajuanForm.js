@@ -1,15 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import '../styles/Form.css';
 
-const PengajuanForm = ({ onBack, onNext }) => {
-  const [formData, setFormData] = useState({
-    nama: '',
-    nik: '',
-    ttl: '',
-    alamat: '',
-    telepon: '',
-    email: '',
-  });
+const PengajuanForm = ({ onNext, initialData }) => {
+  const [formData, setFormData] = useState(initialData);
+
+  useEffect(() => {
+    setFormData(initialData);
+  }, [initialData]);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -17,16 +14,15 @@ const PengajuanForm = ({ onBack, onNext }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log('Form submitted:', formData);
-    if (onNext) onNext();
+    onNext(formData); // Kirim data kembali ke parent
   };
 
   return (
     <div>
-      {/* Tombol Kembali di luar card */}
-      <div className="back-button-wrapper">
+      {/* Tombol Kembali di luar card (tidak muncul di step 1) */}
+      {/* <div className="back-button-wrapper">
         <button className="back-button" onClick={onBack}>← Kembali</button>
-      </div>
+      </div> */}
 
       <div className="form-wrapper">
         <h2 className="form-title">Pengisian Form Pengajuan untuk WNI</h2>
@@ -36,8 +32,8 @@ const PengajuanForm = ({ onBack, onNext }) => {
               <label>Nama Lengkap Ahli Waris</label>
               <input
                 type="text"
-                name="nama"
-                value={formData.nama}
+                name="nama_ahli_waris" // Sesuaikan nama dengan field di backend
+                value={formData.nama_ahli_waris}
                 onChange={handleChange}
                 required
               />
@@ -47,8 +43,8 @@ const PengajuanForm = ({ onBack, onNext }) => {
               <label>NIK</label>
               <input
                 type="text"
-                name="nik"
-                value={formData.nik}
+                name="nik_ahli_waris" // Sesuaikan nama dengan field di backend
+                value={formData.nik_ahli_waris}
                 onChange={handleChange}
                 required
               />
@@ -58,8 +54,8 @@ const PengajuanForm = ({ onBack, onNext }) => {
               <label>Tempat & Tanggal Lahir</label>
               <input
                 type="text"
-                name="ttl"
-                value={formData.ttl}
+                name="ttl_ahli_waris" // Sesuaikan nama dengan field di backend
+                value={formData.ttl_ahli_waris}
                 onChange={handleChange}
                 required
               />
@@ -69,8 +65,8 @@ const PengajuanForm = ({ onBack, onNext }) => {
               <label>Alamat Lengkap Domisili</label>
               <input
                 type="text"
-                name="alamat"
-                value={formData.alamat}
+                name="alamat_ahli_waris" // Sesuaikan nama dengan field di backend
+                value={formData.alamat_ahli_waris}
                 onChange={handleChange}
                 required
               />
@@ -80,8 +76,8 @@ const PengajuanForm = ({ onBack, onNext }) => {
               <label>Nomor Telepon</label>
               <input
                 type="text"
-                name="telepon"
-                value={formData.telepon}
+                name="telepon_ahli_waris" // Sesuaikan nama dengan field di backend
+                value={formData.telepon_ahli_waris}
                 onChange={handleChange}
                 required
               />
@@ -91,8 +87,8 @@ const PengajuanForm = ({ onBack, onNext }) => {
               <label>Email</label>
               <input
                 type="email"
-                name="email"
-                value={formData.email}
+                name="email_ahli_waris" // Sesuaikan nama dengan field di backend
+                value={formData.email_ahli_waris}
                 onChange={handleChange}
                 required
               />

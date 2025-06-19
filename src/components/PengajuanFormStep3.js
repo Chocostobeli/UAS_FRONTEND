@@ -1,30 +1,24 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import '../styles/Form.css';
 
-const PengajuanFormStep3 = ({ onBack, onNext }) => {
-  const [formData, setFormData] = useState({
-    jumlahAhliWaris: '',
-    namaAhliWarisLainnya: '',
-    namaSaksi1: '',
-    nikSaksi1: '',
-    fotoKtpSaksi1: '',
-    namaSaksi2: '',
-    nikSaksi2: '',
-    fotoKtpSaksi2: '',
-  });
+const PengajuanFormStep3 = ({ onBack, onNext, initialData }) => {
+  const [formData, setFormData] = useState(initialData);
+
+  useEffect(() => {
+    setFormData(initialData);
+  }, [initialData]);
 
   const handleChange = (e) => {
     const { name, value, files } = e.target;
     setFormData({
       ...formData,
-      [name]: files ? files[0] : value,
+      [name]: files ? files[0] : value, // Simpan objek File
     });
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log('Step 3 submitted:', formData);
-    if (onNext) onNext();
+    onNext(formData);
   };
 
   return (
@@ -42,8 +36,8 @@ const PengajuanFormStep3 = ({ onBack, onNext }) => {
               <label>Jumlah Ahli Waris</label>
               <input
                 type="number"
-                name="jumlahAhliWaris"
-                value={formData.jumlahAhliWaris}
+                name="jumlah_ahli_waris" // Sesuaikan nama dengan field di backend
+                value={formData.jumlah_ahli_waris}
                 onChange={handleChange}
                 required
               />
@@ -52,80 +46,80 @@ const PengajuanFormStep3 = ({ onBack, onNext }) => {
               <label>Nama Ahli Waris Lainnya</label>
               <input
                 type="text"
-                name="namaAhliWarisLainnya"
-                value={formData.namaAhliWarisLainnya}
+                name="nama_ahli_waris_lainnya" // Sesuaikan nama dengan field di backend
+                value={formData.nama_ahli_waris_lainnya}
                 onChange={handleChange}
               />
             </div>
 
             <h4>Data Saksi</h4>
             <div className="saksi-grid">
-            <div>
+              <div>
                 <label>Nama Saksi 1</label>
                 <input
-                type="text"
-                name="namaSaksi1"
-                value={formData.namaSaksi1}
-                onChange={handleChange}
-                required
+                  type="text"
+                  name="nama_saksi1" // Sesuaikan nama dengan field di backend
+                  value={formData.nama_saksi1}
+                  onChange={handleChange}
+                  required
                 />
-            </div>
-            <div>
+              </div>
+              <div>
                 <label>Nama Saksi 2 (Kalau ada)</label>
                 <input
-                type="text"
-                name="namaSaksi2"
-                value={formData.namaSaksi2}
-                onChange={handleChange}
+                  type="text"
+                  name="nama_saksi2" // Sesuaikan nama dengan field di backend
+                  value={formData.nama_saksi2}
+                  onChange={handleChange}
                 />
-            </div>
+              </div>
             </div>
 
             <div className="saksi-grid">
-            <div>
+              <div>
                 <label>NIK Saksi 1</label>
                 <input
-                type="text"
-                name="nikSaksi1"
-                value={formData.nikSaksi1}
-                onChange={handleChange}
-                required
+                  type="text"
+                  name="nik_saksi1" // Sesuaikan nama dengan field di backend
+                  value={formData.nik_saksi1}
+                  onChange={handleChange}
+                  required
                 />
-            </div>
-            <div>
+              </div>
+              <div>
                 <label>NIK Saksi 2 (Kalau ada)</label>
                 <input
-                type="text"
-                name="nikSaksi2"
-                value={formData.nikSaksi2}
-                onChange={handleChange}
+                  type="text"
+                  name="nik_saksi2" // Sesuaikan nama dengan field di backend
+                  value={formData.nik_saksi2}
+                  onChange={handleChange}
                 />
-            </div>
+              </div>
             </div>
 
             <div className="saksi-grid">
-            <div>
+              <div>
                 <label>Foto KTP Saksi 1</label>
                 <input
-                type="file"
-                name="fotoKtpSaksi1"
-                accept="application/pdf,image/*"
-                onChange={handleChange}
-                required
+                  type="file"
+                  name="foto_ktp_saksi1" // Sesuaikan nama dengan field di backend
+                  accept="application/pdf,image/*"
+                  onChange={handleChange}
+                  required
                 />
-            </div>
-            <div>
+              </div>
+              <div>
                 <label>Foto KTP Saksi 2</label>
                 <input
-                type="file"
-                name="fotoKtpSaksi2"
-                accept="application/pdf,image/*"
-                onChange={handleChange}
+                  type="file"
+                  name="foto_ktp_saksi2" // Sesuaikan nama dengan field di backend
+                  accept="application/pdf,image/*"
+                  onChange={handleChange}
                 />
-            </div>
+              </div>
             </div>
 
-         <div className="form-buttons">
+            <div className="form-buttons">
               <button type="button" className="back-button" onClick={onBack}>Kembali</button>
               <button type="submit" className="form-button">Selanjutnya</button>
             </div>

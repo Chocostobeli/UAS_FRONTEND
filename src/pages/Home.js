@@ -36,7 +36,7 @@ const Home = () => {
       return;
     }
     setOriginFlow("WNI");
-    setStep(1);
+    navigate('/pengajuan');
   };
 
   const handleStartWNAForm = () => {
@@ -62,10 +62,10 @@ const Home = () => {
       )}
 
       {/* WNI */}
-      {step === 1 && <PengajuanForm onBack={handleBackToHome} onNext={() => setStep(2)} />}
+      {/* {step === 1 && <PengajuanForm onBack={handleBackToHome} onNext={() => setStep(2)} />}
       {step === 2 && <PengajuanFormStep2 onBack={() => setStep(1)} onNext={() => setStep(3)} />}
       {step === 3 && <PengajuanFormStep3 onBack={() => setStep(2)} onNext={() => setStep(4)} />}
-      {step === 4 && <PengajuanFormStep4 onBack={() => setStep(3)} onNext={() => setStep(5)} />}
+      {step === 4 && <PengajuanFormStep4 onBack={() => setStep(3)} onNext={() => setStep(5)} />} */}
 
       {/* WNA */}
       {step === 101 && <PengajuanFormWNA onBack={handleBackToHome} onNext={() => setStep(102)} />}
