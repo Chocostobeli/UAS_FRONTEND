@@ -87,6 +87,7 @@ exports.getPengajuan = async (req, res) => {
     console.error('Error fetching pengajuan:', err);
     res.status(500).json({ message: 'Gagal mengambil data pengajuan', error: err.message });
   }
+<<<<<<< HEAD
 };
 
 // --- TAMBAHKAN FUNGSI BARU INI UNTUK UPDATE STATUS ---
@@ -134,4 +135,6 @@ exports.updatePengajuanStatus = async (req, res) => {
     console.error('Error updating pengajuan status:', error);
     res.status(500).json({ message: 'Gagal memperbarui status pengajuan', error: error.message });
   }
+=======
+>>>>>>> 7ae4d61b808098af7fdfe806eeddc5f2f299a100
 };

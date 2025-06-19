@@ -88,5 +88,4 @@ const PengajuanFormStep2 = ({ onBack, onNext, initialData }) => {
     </div>
   );
 };
-
 export default PengajuanFormStep2;

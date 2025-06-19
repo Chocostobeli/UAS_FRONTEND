@@ -1,7 +1,12 @@
 const express = require('express');
 const router = express.Router();
+<<<<<<< HEAD
 const authenticateToken = require('../middleware/authmiddleware'); // Middleware for general users
 const upload = require('../middleware/upload'); // Assuming this multer/fileupload setup is shared
+=======
+const authenticateToken = require('../middleware/authmiddleware');
+const upload = require('../middleware/upload');
+>>>>>>> 7ae4d61b808098af7fdfe806eeddc5f2f299a100
 const profileController = require('../controllers/profileController');
 
 // --- User Profile Routes ---

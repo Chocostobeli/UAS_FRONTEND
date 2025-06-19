@@ -50,11 +50,14 @@ app.use('/api/users', profileRoutes);
 const dashboardRoutes = require('./routes/dashboardRoutes');
 app.use('/api/dashboard', dashboardRoutes); // Endpoint: /api/dashboard/submissions
 
+<<<<<<< HEAD
 // --- TAMBAHKAN BARIS INI ---
 const adminRoutes = require('./routes/adminRoutes'); // <-- Import adminRoutes
 app.use('/api/admin', adminRoutes); // <-- Gunakan adminRoutes dengan prefix /api/admin
 // ----------------------------
 
+=======
+>>>>>>> 7ae4d61b808098af7fdfe806eeddc5f2f299a100
 // Menampilkan file statis dari folder uploads
 app.use('/uploads', express.static('uploads'));
 
