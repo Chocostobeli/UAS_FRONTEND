@@ -15,7 +15,7 @@ const AdminPengajuan = () => {
   useEffect(() => {
     const fetchPengajuanData = async () => {
       try {
-        const token = localStorage.getItem('token'); // Assuming you use a token for admin authentication
+        const token = localStorage.getItem('admintoken'); // Assuming you use a token for admin authentication
         if (!token) {
           navigate('/admin/login'); // Redirect to login if no token
           return;
@@ -34,7 +34,7 @@ const AdminPengajuan = () => {
         // Handle error, e.g., show an alert or redirect
         if (err.response && err.response.status === 401) {
             // Token expired or invalid
-            localStorage.removeItem('token');
+            localStorage.removeItem('admintoken');
             navigate('/admin/login');
             alert('Sesi Anda telah berakhir. Mohon login kembali.');
         } else {
@@ -60,14 +60,11 @@ const AdminPengajuan = () => {
     if (!konfirmasi) return;
 
     try {
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem('admintoken');
       if (!token) {
         navigate('/admin/login');
         return;
       }
-
-      // Replace with your actual API endpoint for updating submission status
-      // You might need to adjust the URL and data structure based on your backend API
       await axios.put(`http://localhost:5000/api/admin/pengajuan/${id}/status`, 
         { status: newStatus },
         {
@@ -87,7 +84,7 @@ const AdminPengajuan = () => {
       alert('Gagal memperbarui status. Silakan coba lagi.');
       // Handle specific errors like 401 (unauthorized)
       if (err.response && err.response.status === 401) {
-          localStorage.removeItem('token');
+          localStorage.removeItem('admintoken');
           navigate('/admin/login');
           alert('Sesi Anda telah berakhir. Mohon login kembali.');
       } else if (err.response && err.response.data && err.response.data.message) {
@@ -97,7 +94,7 @@ const AdminPengajuan = () => {
   };
 
   const handleLogout = () => {
-    localStorage.removeItem('token'); // Make sure you remove the correct item, e.g., 'token' or 'admin'
+    localStorage.removeItem('admintoken'); // Make sure you remove the correct item, e.g., 'token' or 'admin'
     navigate('/admin/login'); // Navigate to admin login, not root, if this is an admin logout
   };
 

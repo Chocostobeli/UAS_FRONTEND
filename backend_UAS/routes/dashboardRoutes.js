@@ -1,18 +1,15 @@
 const express = require('express');
 const router = express.Router();
-const dashboardController = require('../controllers/dashboardController');
-<<<<<<< HEAD
-const authMiddleware = require('../middleware/authmiddleware'); // Import middleware
-=======
-const authMiddleware = require('../middleware/authMiddleware'); // Import middleware
->>>>>>> 7ae4d61b808098af7fdfe806eeddc5f2f299a100
+const dashboardController = require('../controllers/dashboardController'); // Hanya SATU deklarasi ini
+const { authenticateToken, authorizeAdmin } = require('../middleware/authmiddleware'); // Impor autentikasi dan otorisasi
 
 // Rute untuk mendapatkan pengajuan pengguna yang login
-// Gunakan authMiddleware untuk melindungi rute ini
-router.get('/submissions', authMiddleware, dashboardController.getUserSubmissions);
+// Gunakan authenticateToken (yang sudah Anda impor)
+router.get('/submissions', authenticateToken, dashboardController.getUserSubmissions); // Gunakan authenticateToken
 
-<<<<<<< HEAD
+// Jika ada rute admin yang terkait dengan dashboard, Anda bisa menambahkannya di sini
+// Contoh:
+// router.get('/admin-dashboard-data', authenticateToken, authorizeAdmin, dashboardController.getAdminDashboardData);
+
+
 module.exports = router;
-=======
-module.exports = router;
->>>>>>> 7ae4d61b808098af7fdfe806eeddc5f2f299a100

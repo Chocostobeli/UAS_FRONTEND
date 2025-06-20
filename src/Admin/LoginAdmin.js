@@ -24,7 +24,7 @@ const LoginAdmin = () => {
       const { token, admin } = res.data;
 
       // Simpan token dan user ke localStorage (atau sessionStorage)
-      localStorage.setItem('adminToken', token); 
+      localStorage.setItem('admintoken', token); 
       // localStorage.setItem('admin', JSON.stringify(admin));
 
     alert('Login admin berhasil!');

@@ -1,86 +1,146 @@
-// Assume you have a User model (e.g., Mongoose)
-const User = require('../models/User'); // Or Admin model if separate
+// controllers/profileController.js
+const User = require('../models/User'); // Pastikan path ini benar ke model User Sequelize Anda
 
 exports.getProfile = async (req, res) => {
   try {
-    const user = await User.findById(req.user.id).select('-password');
+    if (!req.user || !req.user.id) {
+        console.error('Error in getProfile: req.user or req.user.id is missing.', req.user);
+        return res.status(401).json({ message: 'Tidak terautentikasi: Informasi pengguna tidak tersedia.' });
+    }
+    const user = await User.findByPk(req.user.id, {
+      attributes: { exclude: ['password'] } // Kecualikan password dari hasil
+    });
+
     if (!user) {
       return res.status(404).json({ message: 'Profil pengguna tidak ditemukan' });
     }
     res.json({ user });
   } catch (err) {
-    console.error(err.message);
+    console.error('Error saat getProfile di profileController:', err);
     res.status(500).send('Server Error');
   }
 };
 
 exports.updateProfile = async (req, res) => {
-  // Logic for updating regular user profile
   try {
-    let user = await User.findById(req.user.id);
+    console.log('Mulai updateProfile...');
+    console.log('req.user di updateProfile:', req.user); // Log req.user di sini
+    console.log('req.body di updateProfile:', req.body); // Log req.body
+    console.log('req.file di updateProfile:', req.file); // Log req.file (dari Multer)
+
+    if (!req.user || !req.user.id) {
+        console.error('Error in updateProfile: req.user or req.user.id is missing. Token might be invalid or not set.');
+        return res.status(401).json({ message: 'Tidak terautentikasi: Informasi pengguna tidak tersedia.' });
+    }
+
+    let user = await User.findByPk(req.user.id);
+
     if (!user) {
+      console.log(`User dengan ID ${req.user.id} tidak ditemukan.`);
       return res.status(404).json({ message: 'Pengguna tidak ditemukan' });
     }
 
-    // Update fields
-    user.fullName = req.body.namaLengkap || user.fullName;
-    user.email = req.body.email || user.email;
-    user.whatsapp = req.body.whatsapp || user.whatsapp;
-    user.alamat = req.body.alamat || user.alamat;
-    user.ttl = req.body.ttl || user.ttl;
-    user.jenisKelamin = req.body.jenisKelamin || user.jenisKelamin;
+    // Siapkan objek untuk update
+    const updateFields = {
+      fullName: req.body.namaLengkap || user.fullName,
+      email: req.body.email || user.email,
+      whatsapp: req.body.whatsapp || user.whatsapp,
+      alamat: req.body.alamat || user.alamat,
+      ttl: req.body.ttl || user.ttl,
+      jenisKelamin: req.body.jenisKelamin || user.jenisKelamin,
+    };
 
+    // Jika ada file foto yang diupload, tambahkan ke updateFields
     if (req.file) {
-      // Handle file upload: save req.file.filename or path to user.foto
-      user.foto = `/uploads/${req.file.filename}`; // Adjust path as per your multer config
+      // Pastikan path ini sesuai dengan MULTER destination di middleware/upload.js
+      // Dari upload.js, destination Anda adalah 'uploads/profileUser'
+      // dan filename adalah UUID + ext.
+      // Jadi path yang benar di database adalah '/uploads/profileUser/namafile.ext'
+      updateFields.foto = `/uploads/profileUser/${req.file.filename}`;
+      console.log('Foto baru diatur:', updateFields.foto);
+    } else {
+        console.log('Tidak ada file foto baru yang diupload.');
     }
 
-    await user.save();
-    res.json({ message: 'Profil pengguna berhasil diperbarui', user });
+    // Lakukan update menggunakan metode .update() Sequelize
+    await user.update(updateFields);
+
+    // Ambil ulang data user yang sudah diupdate (tanpa password) untuk respons
+    const updatedUser = await User.findByPk(user.id, {
+        attributes: { exclude: ['password'] }
+    });
+
+    console.log('Profil pengguna berhasil diperbarui untuk ID:', updatedUser.id);
+    res.json({ message: 'Profil pengguna berhasil diperbarui', user: updatedUser });
   } catch (err) {
-    console.error(err.message);
+    console.error('Error saat updateProfile di profileController:', err); // Log error lengkap
     res.status(500).send('Server Error');
   }
 };
 
+// Fungsi admin yang sebelumnya:
 exports.getAdminProfile = async (req, res) => {
-  // Logic for fetching admin profile
   try {
-    const adminUser = await User.findById(req.user.id).select('-password'); // Assuming admins are also in User model with a 'role'
-    if (!adminUser || adminUser.role !== 'admin') { // Double-check role for safety
-      return res.status(404).json({ message: 'Profil admin tidak ditemukan atau bukan admin' });
+    if (!req.user || !req.user.id) {
+        return res.status(401).json({ message: 'Tidak terautentikasi: Informasi admin tidak tersedia.' });
     }
-    res.json({ admin: adminUser }); // Respond with 'admin' key as expected by frontend
+    const adminUser = await User.findByPk(req.user.id, {
+      attributes: { exclude: ['password'] }
+    });
+
+    // Asumsi admin juga disimpan di tabel User dengan kolom 'role'
+    if (!adminUser || (adminUser.role !== 'admin' && adminUser.role !== 'notaris')) {
+      return res.status(404).json({ message: 'Profil admin/notaris tidak ditemukan atau bukan admin/notaris' });
+    }
+    res.json({ admin: adminUser });
   } catch (err) {
-    console.error(err.message);
+    console.error('Error saat getAdminProfile di profileController:', err);
     res.status(500).send('Server Error');
   }
 };
 
 exports.updateAdminProfile = async (req, res) => {
-  // Logic for updating admin profile (similar to updateProfile but for admin)
   try {
-    let adminUser = await User.findById(req.user.id);
-    if (!adminUser || adminUser.role !== 'admin') {
-      return res.status(404).json({ message: 'Admin tidak ditemukan atau bukan admin' });
+    console.log('Mulai updateAdminProfile...');
+    console.log('req.user di updateAdminProfile:', req.user);
+    console.log('req.body di updateAdminProfile:', req.body);
+    console.log('req.file di updateAdminProfile:', req.file);
+
+    if (!req.user || !req.user.id) {
+        return res.status(401).json({ message: 'Tidak terautentikasi: Informasi admin tidak tersedia.' });
     }
 
-    // Update fields for admin
-    adminUser.fullName = req.body.namaLengkap || adminUser.fullName;
-    adminUser.email = req.body.email || adminUser.email;
-    adminUser.whatsapp = req.body.whatsapp || adminUser.whatsapp;
-    adminUser.alamat = req.body.alamat || adminUser.alamat;
-    adminUser.ttl = req.body.ttl || adminUser.ttl;
-    adminUser.jenisKelamin = req.body.jenisKelamin || adminUser.jenisKelamin;
+    let adminUser = await User.findByPk(req.user.id);
+    if (!adminUser || (adminUser.role !== 'admin' && adminUser.role !== 'notaris')) {
+      return res.status(404).json({ message: 'Admin/Notaris tidak ditemukan atau bukan admin/notaris' });
+    }
+
+    const updateFields = {
+        fullName: req.body.namaLengkap || adminUser.fullName,
+        email: req.body.email || adminUser.email,
+        whatsapp: req.body.whatsapp || adminUser.whatsapp,
+        alamat: req.body.alamat || adminUser.alamat,
+        ttl: req.body.ttl || adminUser.ttl,
+        jenisKelamin: req.body.jenisKelamin || adminUser.jenisKelamin,
+    };
 
     if (req.file) {
-      adminUser.foto = `/uploads/${req.file.filename}`;
+      updateFields.foto = `/uploads/profileUser/${req.file.filename}`; // Pastikan path ini benar
+      console.log('Foto admin baru diatur:', updateFields.foto);
+    } else {
+        console.log('Tidak ada file foto admin baru yang diupload.');
     }
 
-    await adminUser.save();
-    res.json({ message: 'Profil admin berhasil diperbarui', admin: adminUser }); // Respond with 'admin' key
+    await adminUser.update(updateFields);
+
+    const updatedAdminUser = await User.findByPk(adminUser.id, {
+        attributes: { exclude: ['password'] }
+    });
+
+    console.log('Profil admin/notaris berhasil diperbarui untuk ID:', updatedAdminUser.id);
+    res.json({ message: 'Profil admin/notaris berhasil diperbarui', admin: updatedAdminUser });
   } catch (err) {
-    console.error(err.message);
+    console.error('Error saat updateAdminProfile di profileController:', err);
     res.status(500).send('Server Error');
   }
 };

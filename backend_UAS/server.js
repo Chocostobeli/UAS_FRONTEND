@@ -3,17 +3,19 @@ const cors = require('cors');
 const fileUpload = require('express-fileupload');
 const sequelizePengajuan = require('./config/databasePengajuan');
 const sequelizeUser = require('./config/databaseUser'); // Import database user
+const Pengajuan = require('../backend_UAS/models/Pengajuan'); // Assuming you have a Pengajuan model
+const auth = require('../backend_UAS/middleware/authmiddleware');
 require('dotenv').config();
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Middleware untuk menangani upload file
-app.use(fileUpload({
-  createParentPath: true, // Membuat direktori parent jika belum ada
-  limits: { fileSize: 50 * 1024 * 1024 }, // Batasan ukuran file 50MB
-}));
+// // Middleware untuk menangani upload file
+// app.use(fileUpload({
+//   createParentPath: true, // Membuat direktori parent jika belum ada
+//   limits: { fileSize: 50 * 1024 * 1024 }, // Batasan ukuran file 50MB
+// }));
 
 // Sinkronkan database Pengajuan
 sequelizePengajuan.sync({ alter: true }) // auto update tabel sesuai model
@@ -49,17 +51,10 @@ app.use('/api/users', profileRoutes);
 // Rute baru untuk Dashboard Pengajuan
 const dashboardRoutes = require('./routes/dashboardRoutes');
 app.use('/api/dashboard', dashboardRoutes); // Endpoint: /api/dashboard/submissions
-
-<<<<<<< HEAD
-// --- TAMBAHKAN BARIS INI ---
-const adminRoutes = require('./routes/adminRoutes'); // <-- Import adminRoutes
-app.use('/api/admin', adminRoutes); // <-- Gunakan adminRoutes dengan prefix /api/admin
-// ----------------------------
-
-=======
->>>>>>> 7ae4d61b808098af7fdfe806eeddc5f2f299a100
 // Menampilkan file statis dari folder uploads
 app.use('/uploads', express.static('uploads'));
+const adminPengajuanRoutes = require('./routes/adminRoutes'); // You'd create this file
+app.use('/api/admin', adminPengajuanRoutes);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {

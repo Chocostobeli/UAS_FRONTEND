@@ -13,10 +13,10 @@ const DashboardProfile = () => {
     alamat: '',
     ttl: '',
     jenisKelamin: '',
-    foto: null,
+    foto: null, // foto akan menyimpan objek File
   });
 
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState(null); // State untuk data user dari backend
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -27,7 +27,7 @@ const DashboardProfile = () => {
         });
 
         const data = res.data.user;
-        setUser(data);
+        setUser(data); // Simpan data user asli
         setFormData({
           namaLengkap: data.fullName || '',
           email: data.email || '',
@@ -35,15 +35,19 @@ const DashboardProfile = () => {
           alamat: data.alamat || '',
           ttl: data.ttl || '',
           jenisKelamin: data.jenisKelamin || '',
-          foto: null,
+          foto: null, // Setel foto ke null agar hanya diisi jika ada file baru yang dipilih
         });
       } catch (err) {
         console.error('Gagal ambil data profil', err);
+        // Mungkin arahkan ke login jika token tidak valid
+        if (err.response && err.response.status === 401) {
+          navigate('/login');
+        }
       }
     };
 
     fetchProfile();
-  }, []);
+  }, [navigate]); // Tambahkan navigate sebagai dependency jika ESLint menyarankan
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -51,36 +55,74 @@ const DashboardProfile = () => {
   };
 
   const handleFileChange = (e) => {
-    setFormData((prev) => ({ ...prev, foto: e.target.files[0] }));
+    // Pastikan e.target.files ada dan berisi file
+    if (e.target.files && e.target.files[0]) {
+      setFormData((prev) => ({ ...prev, foto: e.target.files[0] }));
+    } else {
+      setFormData((prev) => ({ ...prev, foto: null })); // Atur ke null jika tidak ada file yang dipilih
+    }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const konfirmasi = window.confirm('Apakah Anda yakin ingin menyimpan perubahan profil?');
 
-    if (!konfirmasi) return; // Jika user klik "Cancel", hentikan proses
+    const konfirmasi = window.confirm('Apakah Anda yakin ingin menyimpan perubahan profil?');
+    if (!konfirmasi) return;
 
     const token = localStorage.getItem('token');
-    const data = new FormData();
+    if (!token) {
+      alert("Token tidak ditemukan. Silakan login ulang.");
+      navigate('/login');
+      return;
+    }
 
-    Object.entries(formData).forEach(([key, val]) => {
-      if (val !== null) {
-        data.append(key, val);
+    const dataToSend = new FormData(); // Gunakan nama variabel yang lebih jelas
+    for (const key in formData) {
+      if (formData.hasOwnProperty(key)) { // Pastikan properti milik objek itu sendiri
+        const value = formData[key];
+
+        if (key === 'foto') {
+          // Hanya tambahkan file foto jika itu adalah objek File yang valid
+          if (value instanceof File) {
+            dataToSend.append('foto', value);
+          }
+          // Jika value adalah null dan tidak ada foto, jangan append apapun
+        } else {
+          // Untuk field teks, tambahkan hanya jika nilainya tidak null/undefined dan bukan string kosong
+          if (value !== null && value !== undefined && value !== '') {
+            dataToSend.append(key, value);
+          }
+        }
       }
-    });
+    }
+
+    // DEBUG: Log FormData yang akan dikirim (untuk debugging lebih lanjut)
+    console.log('FormData yang akan dikirim:');
+    for (let pair of dataToSend.entries()) {
+        console.log(pair[0]+ ': ' + pair[1]);
+    }
 
     try {
-      await axios.put('http://localhost:5000/api/users/profile', data, {
-        headers: { Authorization: `Bearer ${token}` },
+      await axios.put('http://localhost:5000/api/users/profile', dataToSend, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          // Penting: JANGAN SET Content-Type: 'multipart/form-data' secara manual.
+          // Axios akan secara otomatis mengaturnya dengan boundary yang benar.
+        },
       });
-
       alert('Profil berhasil disimpan!');
-      window.location.reload();
+      window.location.reload(); // Reload halaman untuk melihat perubahan
     } catch (err) {
-      console.error(err);
-      alert('Gagal menyimpan profil.');
+      console.error('Gagal menyimpan profil:', err);
+      // Lebih spesifik dalam pesan error ke pengguna
+      if (err.response && err.response.data && err.response.data.message) {
+        alert('Gagal menyimpan profil: ' + err.response.data.message);
+      } else {
+        alert('Gagal menyimpan profil. Silakan coba lagi.');
+      }
     }
   };
+
 
   const backbutton = () => {
     navigate('/');
@@ -113,15 +155,30 @@ const DashboardProfile = () => {
             <div className="profile-photo">
               <img
                 src={
-                  formData.foto
-                    ? URL.createObjectURL(formData.foto)
-                    : user?.foto
-                      ? `http://localhost:5000${user.foto}`
-                      : defaultProfile // ✅ Gambar lokal fallback
+                  formData.foto // Jika ada file baru yang dipilih di form
+                    ? URL.createObjectURL(formData.foto) // Tampilkan preview file baru
+                    : user?.foto // Jika tidak ada file baru, dan ada foto lama dari user
+                      ? `http://localhost:5000${user.foto}` // Tampilkan foto lama
+                      : defaultProfile // Jika tidak ada keduanya, tampilkan default
                 }
                 alt="Profile"
               />
-              <input type="file" accept="image/*" onChange={handleFileChange} />
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleFileChange}
+                name="foto" // <-- PASTIKAN INI ADA!
+                id="profileFotoInput" // Tambahkan ID untuk label jika perlu
+                style={{ display: 'none' }} // Sembunyikan input asli
+              />
+              {/* Tambahkan tombol kustom untuk memilih file */}
+              <button
+                type="button"
+                className="choose-photo-btn"
+                onClick={() => document.getElementById('profileFotoInput').click()}
+              >
+                Pilih Foto
+              </button>
             </div>
 
             <form className="profile-form" onSubmit={handleSubmit}>

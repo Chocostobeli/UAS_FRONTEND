@@ -50,12 +50,8 @@ router.post(
   pengajuanController.createPengajuan
 );
 
-// --- Rute GET untuk Mendapatkan Pengajuan (existing code Anda) ---
 router.get('/', pengajuanController.getPengajuan);
 
-
-// --- TAMBAHKAN RUTE PUT INI UNTUK UPDATE STATUS ---
-// Pastikan Anda juga mengimpor model PengajuanWna di pengajuanController
 router.put('/:id', pengajuanController.updatePengajuanStatus);
 
 module.exports = router;

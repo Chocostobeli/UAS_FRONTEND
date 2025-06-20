@@ -2,18 +2,10 @@ const express = require('express');
 const router = express.Router();
 const PengajuanWNI = require('../models/Pengajuan'); // Ini adalah model untuk pengajuan WNI
 const PengajuanWna = require('../models/PengajuanWna'); // Ini adalah model untuk pengajuan WNA
-const User = require('../models/User'); // Import your existing User model
-const authenticateToken = require('../middleware/authmiddleware'); // Import your authentication middleware
-const path = require('path'); // Node.js built-in module for path manipulation
-const fs = require('fs');     // Node.js built-in module for file system operations
-const authorizeAdmin = (req, res, next) => {
-    // req.user harus tersedia dari authenticateToken middleware
-    if (req.user && (req.user.role === 'admin' || req.user.role === 'notaris')) {
-        next(); // Lanjutkan jika peran adalah 'admin' atau 'notaris'
-    } else {
-        res.status(403).json({ message: 'Akses ditolak: Hanya admin atau notaris yang diizinkan.' });
-    }
-};
+const upload = require('../middleware/upload'); // Untuk upload file profil admin
+const adminProfileController = require('../controllers/profileController'); // Untuk profil admin
+const pengajuanController = require('../controllers/pengajuanController');
+
 router.get('/pengajuan', async (req, res) => {
   try {
     // Ambil semua pengajuan WNI
@@ -242,87 +234,5 @@ router.get('/riwayat', async (req, res) => {
   }
 });
 
-// --- ADMIN PROFILE ROUTES ---
-// Route to get admin profile
-// This route will be accessed as GET /api/admin/profile
-router.get('/profile', authenticateToken, authorizeAdmin, async (req, res) => { // <<< APPLIED MIDDLEWARE
-    try {
-        // req.user will contain the decoded token payload (e.g., { id: 'user_uuid', role: 'admin' })
-        const adminId = req.user.id; // Get ID from the authenticated user
-        const admin = await User.findByPk(adminId, { // Use User model
-            attributes: { exclude: ['password'] } // Exclude password from the result
-        });
 
-        if (!admin) {
-            return res.status(404).json({ message: 'Admin not found.' });
-        }
-
-        // Return the user object, potentially renamed as 'admin' for frontend consistency
-        res.status(200).json({ admin: admin });
-    } catch (error) {
-        console.error('Error fetching admin profile:', error);
-        res.status(500).json({ message: 'Server error when fetching admin profile.' });
-    }
-});
-
-// Route to update admin profile
-// This route will be accessed as PUT /api/admin/profile
-router.put('/profile', authenticateToken, authorizeAdmin, async (req, res) => { // <<< APPLIED MIDDLEWARE
-    try {
-        const adminId = req.user.id; // Get ID from the authenticated user
-        const { fullName, email, whatsapp, alamat, ttl, jenisKelamin } = req.body;
-
-        const admin = await User.findByPk(adminId); // Use User model
-        if (!admin) {
-            return res.status(404).json({ message: 'Admin not found.' });
-        }
-
-        // Handle file upload if a new photo is provided
-        let fotoPath = admin.foto; // Keep existing photo path by default
-
-        if (req.files && req.files.foto) {
-            const fotoFile = req.files.foto;
-            const uploadDir = path.join(__dirname, '../uploads/admin_photos');
-
-            // Create directory if it doesn't exist
-            if (!fs.existsSync(uploadDir)) {
-                fs.mkdirSync(uploadDir, { recursive: true });
-            }
-
-            // Generate a unique filename to prevent conflicts
-            const fileName = `${Date.now()}_${fotoFile.name}`;
-            const filePath = path.join(uploadDir, fileName);
-
-            await fotoFile.mv(filePath); // Move the uploaded file to the server
-
-            // If there was an old photo, delete it to save space
-            if (admin.foto && admin.foto !== '') {
-                const oldFotoPath = path.join(__dirname, '..', admin.foto);
-                if (fs.existsSync(oldFotoPath)) {
-                    fs.unlinkSync(oldFotoPath);
-                }
-            }
-
-            fotoPath = `/uploads/admin_photos/${fileName}`; // Store the relative path
-        }
-
-        // Update admin data using the User model fields
-        admin.fullName = fullName || admin.fullName;
-        admin.email = email || admin.email;
-        admin.whatsapp = whatsapp || admin.whatsapp;
-        admin.alamat = alamat || admin.alamat;
-        admin.ttl = ttl || admin.ttl;
-        admin.jenisKelamin = jenisKelamin || admin.jenisKelamin;
-        admin.foto = fotoPath; // Update photo path
-
-        await admin.save();
-
-        res.status(200).json({ message: 'Profil admin berhasil disimpan!', admin: admin });
-    } catch (error) {
-        console.error('Error updating admin profile:', error);
-        res.status(500).json({ message: 'Gagal menyimpan profil admin.', error: error.message });
-    }
-});
-
-
-module.exports = router; // This line is essential
+module.exports = router;
