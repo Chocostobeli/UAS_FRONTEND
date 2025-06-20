@@ -187,7 +187,6 @@ const DashboardProfile = () => {
 
               <label htmlFor="email">Email *</label>
               <input id="email" name="email" type="email" value={formData.email} onChange={handleChange} />
-              <p className="verified">Email Terverifikasi</p>
 
               <label htmlFor="whatsapp">Nomor WhatsApp *</label>
               <input id="whatsapp" name="whatsapp" type="text" value={formData.whatsapp} onChange={handleChange} />

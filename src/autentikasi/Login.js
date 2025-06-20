@@ -73,9 +73,6 @@ const Login = () => {
                 {showPassword ? '🙈' : '👁️'}
               </span>
             </div>
-            <label className="checkbox">
-              <input type="checkbox" /> Remember me
-            </label>
             <button type="submit" className="auth-button">Login</button>
           </form>
           {error && <p style={{ color: 'red', marginTop: '10px' }}>{error}</p>}

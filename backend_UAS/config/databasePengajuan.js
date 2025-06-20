@@ -1,5 +1,5 @@
 const { Sequelize } = require('sequelize');
-require('dotenv').config();
+// require('dotenv').config();
 
 const sequelizePengajuan = new Sequelize('db_pengajuan', 'root', '', {
   host: 'localhost',
