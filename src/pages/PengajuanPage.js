@@ -1,61 +1,59 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import PengajuanFormWNA from '../components/PengajuanFormWNA';
-import PengajuanFormWNA2 from '../components/PengajuanFormWNA2';
-import PengajuanFormWNA3 from '../components/PengajuanFormWNA3';
-import PengajuanFormWNA4 from '../components/PengajuanFormWNA4';
-import PengajuanFormWNA5 from '../components/PengajuanFormWNA5';
+import PengajuanForm from '../components/PengajuanForm';
+import PengajuanFormStep2 from '../components/PengajuanFormStep2';
+import PengajuanFormStep3 from '../components/PengajuanFormStep3';
+import PengajuanFormStep4 from '../components/PengajuanFormStep4';
+import PengajuanFormStep5 from '../components/PengajuanFormStep5';
 import '../styles/Form.css'; // Pastikan CSS ini ada
 
-const API_BASE_URL = 'http://localhost:5000/api/pengajuan-wna'; // Sesuaikan jika API Anda di port lain
+const API_BASE_URL = 'http://localhost:5000/api/pengajuan'; // Sesuaikan jika API Anda di port lain
 
-const PengajuanWNAPage = () => {
+const PengajuanPage = () => {
   const navigate = useNavigate();
   const [currentStep, setCurrentStep] = useState(1);
   const [formData, setFormData] = useState({
     // Step 1
-    nama_ahli_waris_wna: '',
-    nik_ahli_waris_wna: '',
-    ttl_ahli_waris_wna: '',
-    alamat_ahli_waris_wna: '',
-    telepon_ahli_waris_wna: '',
-    email_ahli_waris_wna: '',
+    nama_ahli_waris: '',
+    nik_ahli_waris: '',
+    ttl_ahli_waris: '',
+    alamat_ahli_waris: '',
+    telepon_ahli_waris: '',
+    email_ahli_waris: '',
 
     // Step 2
-    nama_pewaris_wna: '',
-    ktp_pewaris_wna: '', // Ini string jika dari input teks, atau File jika perlu diupload (sesuaikan)
-    tanggal_wafat_pewaris_wna: '',
-    alamat_terakhir_pewaris_wna: '',
+    nama_pewaris: '',
+    ktp_pewaris: '', // Ini string jika dari input teks, atau File jika perlu diupload (sesuaikan)
+    tanggal_wafat_pewaris: '',
+    alamat_terakhir_pewaris: '',
 
     // Step 3
-    jumlah_ahli_waris_wna: '',
-    nama_ahli_waris_lainnya_wna: '',
-    nama_saksi1_wna: '',
-    nik_saksi1_wna: '',
-    foto_ktp_saksi1_wna: null, // File object
-    nama_saksi2_wna: '',
-    nik_saksi2_wna: '',
-    foto_ktp_saksi2_wna: null, // File object
+    jumlah_ahli_waris: '',
+    nama_ahli_waris_lainnya: '',
+    nama_saksi1: '',
+    nik_saksi1: '',
+    foto_ktp_saksi1: null, // File object
+    nama_saksi2: '',
+    nik_saksi2: '',
+    foto_ktp_saksi2: null, // File object
 
     // Step 4
-    surat_kematian_wna: null, // File object
-    ktp_ahli_waris_file_wna: null, // File object (changed from ktpAhliWaris to match backend model)
-    kartu_keluarga_wna: null, // File object
-    surat_nikah_wna: null, // File object
-    akta_kelahiran_wna: null, // File object
-    surat_kuasa_wna: null, // File object
-    sertifikat_tanah_wna: null, // File object
-    buku_tabungan_wna: null, // File object
-    cek_wasiat_ahu: null,
-    sppt_pbb: null,
-    pernyataan_benar_wna: false,
+    surat_kematian: null, // File object
+    ktp_ahli_waris_file: null, // File object (changed from ktpAhliWaris to match backend model)
+    kartu_keluarga: null, // File object
+    surat_nikah: null, // File object
+    akta_kelahiran: null, // File object
+    surat_kuasa: null, // File object
+    sertifikat_tanah: null, // File object
+    buku_tabungan: null, // File object
+    pernyataan_benar: false,
 
     // Step 5
-    opsi_pengiriman_wna: '',
-    nama_penerima_wna: '', // Nama di step 5 menjadi nama_penerima
-    nomor_telepon_penerima_wna: '', // Nomor Telepon di step 5 menjadi nomor_telepon_penerima
-    alamat_pengiriman_wna: '', // Alamat di step 5 menjadi alamat_pengiriman
+    opsi_pengiriman: '',
+    nama_penerima: '', // Nama di step 5 menjadi nama_penerima
+    nomor_telepon_penerima: '', // Nomor Telepon di step 5 menjadi nomor_telepon_penerima
+    alamat_pengiriman: '', // Alamat di step 5 menjadi alamat_pengiriman
   });
 
   const handleNext = (newData) => {
@@ -66,8 +64,6 @@ const PengajuanWNAPage = () => {
   const handleBack = () => {
     setCurrentStep((prevStep) => prevStep - 1);
   };
-
-
 
   const handleSubmit = async (finalData) => {
     const allData = { ...formData, ...finalData };
@@ -86,9 +82,9 @@ const PengajuanWNAPage = () => {
 
     // Append file fields
     const fileFields = [
-      'foto_ktp_saksi1_wna', 'foto_ktp_saksi2_wna', 'surat_kematian_wna',
-      'ktp_ahli_waris_file_wna', 'kartu_keluarga_wna', 'surat_nikah_wna',
-      'akta_kelahiran_wna', 'surat_kuasa_wna', 'sertifikat_tanah_wna', 'buku_tabungan_wna', 'cek_wasiat_ahu', 'sppt_pbb',
+      'foto_ktp_saksi1', 'foto_ktp_saksi2', 'surat_kematian',
+      'ktp_ahli_waris_file', 'kartu_keluarga', 'surat_nikah',
+      'akta_kelahiran', 'surat_kuasa', 'sertifikat_tanah', 'buku_tabungan'
     ];
 
     fileFields.forEach(field => {
@@ -116,17 +112,17 @@ const PengajuanWNAPage = () => {
   const renderStep = () => {
     switch (currentStep) {
       case 1:
-        return <PengajuanFormWNA onNext={handleNext} initialData={formData} />;
+        return <PengajuanForm onNext={handleNext} initialData={formData} />;
       case 2:
-        return <PengajuanFormWNA2 onBack={handleBack} onNext={handleNext} initialData={formData} />;
+        return <PengajuanFormStep2 onBack={handleBack} onNext={handleNext} initialData={formData} />;
       case 3:
-        return <PengajuanFormWNA3 onBack={handleBack} onNext={handleNext} initialData={formData} />;
+        return <PengajuanFormStep3 onBack={handleBack} onNext={handleNext} initialData={formData} />;
       case 4:
-        return <PengajuanFormWNA4 onBack={handleBack} onNext={handleNext} initialData={formData} />;
+        return <PengajuanFormStep4 onBack={handleBack} onNext={handleNext} initialData={formData} />;
       case 5:
-        return <PengajuanFormWNA5 onBack={handleBack} onSubmit={handleSubmit} initialData={formData} />;
+        return <PengajuanFormStep5 onBack={handleBack} onSubmit={handleSubmit} initialData={formData} />;
       default:
-        return <div>Langkah tidak dikenali</div>;
+        return <PengajuanForm onNext={handleNext} initialData={formData} />;
     }
   };
 
@@ -137,4 +133,4 @@ const PengajuanWNAPage = () => {
   );
 };
 
-export default PengajuanWNAPage;
+export default PengajuanPage;

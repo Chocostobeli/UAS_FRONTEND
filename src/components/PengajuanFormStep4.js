@@ -16,12 +16,20 @@ const PengajuanFormStep4 = ({ onBack, onNext, initialData }) => {
     });
   };
 
+  // const handleCheckboxChange = (e) => {
+  //   setFormData({
+  //     ...formData,
+  //     pernyataan_benar: e.target.checked, // Sesuaikan nama dengan field di backend
+  //   });
+  // };
   const handleCheckboxChange = (e) => {
-    setFormData({
-      ...formData,
-      pernyataan_benar: e.target.checked, // Sesuaikan nama dengan field di backend
-    });
-  };
+  const newValue = e.target.checked;
+  setFormData({
+    ...formData,
+    pernyataan_benar: newValue,
+  });
+  console.log("Checkbox changed. New value of pernyataan_benar:", newValue);
+};
 
   const handleReset = () => {
     setFormData({
@@ -39,14 +47,23 @@ const PengajuanFormStep4 = ({ onBack, onNext, initialData }) => {
     // Juga reset input file secara visual jika diperlukan (misal: dengan me-reset key input)
   };
 
+  // const handleSubmit = (e) => {
+  //   e.preventDefault();
+  //   if (!formData.pernyataan_benar) {
+  //     alert("Anda harus menyetujui pernyataan kebenaran data."); // Menggunakan alert sementara
+  //     return;
+  //   }
+  //   onNext(formData);
+  // };
   const handleSubmit = (e) => {
-    e.preventDefault();
-    if (!formData.pernyataan_benar) {
-      alert("Anda harus menyetujui pernyataan kebenaran data."); // Menggunakan alert sementara
-      return;
-    }
-    onNext(formData);
-  };
+  e.preventDefault();
+  console.log("Submitting form. Current formData.pernyataan_benar:", formData.pernyataan_benar);
+  if (!formData.pernyataan_benar) {
+   onNext(formData);
+    return;
+  }
+  onNext(formData);
+};
 
   return (
     <div>

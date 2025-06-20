@@ -30,7 +30,7 @@ const PengajuanFormStep5 = ({ onBack, onSubmit, initialData }) => {
       </div>
 
       <div className="form-wrapper">
-        <h2 className="form-title">Pengisian Forum Pengajuan untuk WNI</h2>
+        <h2 className="form-title">Pengisian Forum Pengajuan untuk WNI Asal Tionghoa</h2>
         <div className="form-container">
           <h3 className="form-subtitle">Opsi Pengiriman dan Pengambilan Surat</h3>
 

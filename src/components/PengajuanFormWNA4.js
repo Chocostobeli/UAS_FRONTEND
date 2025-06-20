@@ -44,7 +44,7 @@ const PengajuanFormStep4 = ({ onBack, onNext, initialData }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!formData.pernyataan_benar) {
-      alert("Anda harus menyetujui pernyataan kebenaran data."); // Menggunakan alert sementara
+      onNext(formData);// Menggunakan alert sementara
       return;
     }
     onNext(formData);
